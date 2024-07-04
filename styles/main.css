@@ -1,4 +1,4 @@
-body {
+/*body {
     font-family: Arial, sans-serif;
     display: flex;
     flex-direction: column;
@@ -18,4 +18,61 @@ button {
     font-size: 16px;
     cursor: pointer;
     margin-top: 20px;
+}*/
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
 }
+
+#camera-container {
+    position: relative; /* Needed for absolute positioning of controls */
+    width: 640px; /* Set a desired width for the video container */
+    height: 360px; /* Set a desired height for the video container */
+}
+
+#controls {
+    position: absolute; /* Position buttons at the bottom */
+    bottom: 20px; /* Adjust spacing from bottom */
+    right: 20px;  /* Adjust horizontal spacing from right */
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* You can add styles for the buttons here */
+
+
+
+#camera-stream, #camera-canvas {
+    display: none;
+}
+
+#camera-stream {
+    /*transform: scale(0.2); /* Reduce video display size by 5 times */
+    width: 100%; /* Scale video to fit container */
+    height: 100%;
+}
+
+#toggle-camera-btn {
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+ /*
+#capture-image-btn {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #9b59b6;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    opacity: 0.5; Initially disabled 
+}*/
