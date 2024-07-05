@@ -1,13 +1,13 @@
 const CACHE_NAME = 'pwa-cache-v1';
 const urlsToCache = [
-    '/index.html',
-    '/styles/main.css',
-    '/script/main.js',
-    '/manifest.json',
-    '/service-worker.js',
-    '/images/icon-192x192.png',
-    '/images/icon-512x512.png',
-    '/images/favicon.ico'
+    './index.html',
+    './styles/main.css',
+    './script/main.js',
+    './manifest.json',
+    './service-worker.js',
+    './images/icon-192x192.png',
+    './images/icon-512x512.png',
+    './images/favicon.ico'
 ];
 
 self.addEventListener('install', event => {

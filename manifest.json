@@ -1,7 +1,7 @@
 {
     "name": "ground-eye-analysis",
     "short_name": "ground-app",
-    "start_url": "/ground-eye-analysis/index.html",
+    "start_url": "./index.html",
     "display": "standalone",
     "background_color": "#ffffff",
     "theme_color": "#000000",
