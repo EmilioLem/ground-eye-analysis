@@ -6,14 +6,14 @@
     <title>Document</title>
     <style>
         #camera-stream{
-            /* transform: scale(); */
             width: auto;
             height: 30vh;
         }
     </style>
 </head>
 <body>
-    <video id="camera-stream" width="1280" height="720" autoplay muted></video>
+    <!-- width="1280" height="720"  -->
+    <video id="camera-stream" autoplay muted></video>
 
     <div id="controls">
         <button id="toggle-camera-btn">Open Camera</button>
@@ -38,9 +38,9 @@ toggleCameraBtn.addEventListener('click', async () => {
     try {
       const constraints = {
         video: {
-          facingMode: "environment",
+          facingMode: "environment"/*,
           height: { min: 720, ideal: 720, max: 720 }, // Request 720px height
-          width: { min: 1280, ideal: 1280, max: 1280 }, // Request 1280px width
+          width: { min: 1280, ideal: 1280, max: 1280 }, // Request 1280px width*/
         }
       };
       mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
@@ -51,6 +51,9 @@ toggleCameraBtn.addEventListener('click', async () => {
     } catch (error) {
       console.error('Error accessing camera:', error);
     }
+    setTimeout(()=>{
+        alert(`vW: ${document.querySelector("video").videoWidth}  &  vH: ${document.querySelector("video").videoHeight}`);
+    }, 500);
   }
 });
     </script>
