@@ -6,16 +6,16 @@ body {
     margin: 0;
 }
 
-#camera-container {
-    position: relative; /* Needed for absolute positioning of controls */
+/*#camera-container {
+    position: relative;  Needed for absolute positioning of controls */
     /*width: 640px;  Set a desired width for the video container 
-    height: 360px; /* Set a desired height for the video container */
+    height: 360px; /* Set a desired height for the video container *
 
     width: 100%;
-    max-width: 80vw;/*720px;  Set a maximum width for larger screens */
+    max-width: 80vw;/*720px;  Set a maximum width for larger screens *
     height: auto;
-    aspect-ratio: 16 / 9; /* Maintain a 16:9 aspect ratio */
-}
+    aspect-ratio: 16 / 9; /* Maintain a 16:9 aspect ratio *
+}*/
 
 #controls {
     position: absolute; /* Position buttons at the bottom */
@@ -35,9 +35,8 @@ body {
 
 #camera-stream {
     /*transform: scale(0.2); /* Reduce video display size by 5 times */
-    width: 100%; /* Scale video to fit container */
-    height: auto;
-    /* 100%; */
+    width: auto; /* Scale video to fit container */
+    height: 30vh;
 }
 
 #toggle-camera-btn {

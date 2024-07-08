@@ -38,9 +38,9 @@ toggleCameraBtn.addEventListener('click', async () => {
     try {
       const constraints = {
         video: {
-          facingMode: "environment"/*,
-          height: { min: 720, ideal: 720, max: 720 }, // Request 720px height
-          width: { min: 1280, ideal: 1280, max: 1280 }, // Request 1280px width*/
+          facingMode: "environment",
+          height: { min: 1080, ideal: 1080, max: 1080 }, // Request 720px height
+          width: { min: 1080, ideal: 1080, max: 1080 }, // Request 1280px width*/
         }
       };
       mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
