@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #camera-stream{
+            /* transform: scale(); */
+            width: auto;
+            height: 60vh;
+        }
+    </style>
+</head>
+<body>
+    <video id="camera-stream" width="720" height="1280" autoplay muted></video>
+
+    <div id="controls">
+        <button id="toggle-camera-btn">Open Camera</button>
+        <button id="take-measurement-btn" disabled>Take Measurement</button>
+    </div>
+    <script>
+        const videoElement = document.getElementById('camera-stream');
+const toggleCameraBtn = document.getElementById('toggle-camera-btn');
+
+let mediaStream = null; // Store media stream reference
+let isCameraOn = false; // Boolean to track camera state
+
+toggleCameraBtn.addEventListener('click', async () => {
+  if (isCameraOn) {
+    // Close camera
+    videoElement.srcObject = null; // Stop video source
+    videoElement.style.display = 'none';
+    mediaStream.getTracks().forEach(track => track.stop()); // Stop media tracks
+    isCameraOn = false;
+    toggleCameraBtn.textContent = 'Open Camera';
+  } else {
+    try {
+      const constraints = {
+        video: {
+          facingMode: "environment",
+          width: { min: 720, ideal: 720, max: 720 }, // Request 720px height
+          height: { min: 1280, ideal: 1280, max: 1280 }, // Request 1280px width
+        }
+      };
+      mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
+      videoElement.srcObject = mediaStream;
+      videoElement.style.display = 'block';
+      isCameraOn = true;
+      toggleCameraBtn.textContent = 'Close Camera';
+    } catch (error) {
+      console.error('Error accessing camera:', error);
+    }
+  }
+});
+    </script>
+</body>
+</html>
