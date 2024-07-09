@@ -9,9 +9,20 @@
 > The image sensor that phones have nowadays is way more powerful than the mid-range color sensors on the market, but a calibration program is needed, [end of the text].
 
 ---
+---
 
 ## Ideas:
+- try **new OffscreenCanvas(x,y)** instead of *document.createElement('canvas')* 
 - Test a lookup table, built with a couple of color-references samples.
 - Modify color on multiple spaces (hsl, hsv... rgb is boring :)
+   *chroma-js* looks promising!!! 
 - Use **polinomail interpolation** to map the unknow colors, matching the reference ones.
+- Calibration "subjects"
+    - White/Black brightness (before anything else? The most common shift?)
+    - HSL... 
+- Try using a few, a couple more, and a lot of calibration points (our AI friends can help :)
+Maybe... a demo for different cases??? 
+- Color Correction Matrices (CCMs) are... to complex to calibrate, and not very performant :/
+- Good lightning (not necesarely consistent) and colorful background is crucial to avoid self-comensation artifacts!!!
 - Ask to many people if the url is too... strange, and then ask the what would they think about a *bit.ly* shorted version.
+- Divide whole code into small useful files
