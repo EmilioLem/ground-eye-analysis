@@ -12,17 +12,38 @@
 ---
 
 ## Ideas:
+
 - try **new OffscreenCanvas(x,y)** instead of *document.createElement('canvas')* 
-- Test a lookup table, built with a couple of color-references samples.
-- Modify color on multiple spaces (hsl, hsv... rgb is boring :)
-   *chroma-js* looks promising!!! 
-- Use **polinomail interpolation** to map the unknow colors, matching the reference ones.
+- *chroma-js* looks promising!!! 
+
 - Calibration "subjects"
     - White/Black brightness (before anything else? The most common shift?)
-    - HSL... 
+    - HSL, HSV and RGB *popular* colors
 - Try using a few, a couple more, and a lot of calibration points (our AI friends can help :)
 Maybe... a demo for different cases??? 
 - Color Correction Matrices (CCMs) are... to complex to calibrate, and not very performant :/
 - Good lightning (not necesarely consistent) and colorful background is crucial to avoid self-comensation artifacts!!!
 - Ask to many people if the url is too... strange, and then ask the what would they think about a *bit.ly* shorted version.
 - Divide whole code into small useful files
+
+### Actual functions to describe color correction (as a lookup table)
+
+- Linear interpolation (ax+b)
+- Polinomial interpolation ( $\sum a_n x_n$ con $n=$ #puntos)
+- Polinomial regression ( $\sum a_n x_n$ con $n<<$ #puntos) 
+- Spline interpolation? 
+- 
+
+### Techniques to take quality color samples:
+
+Hopefully, each point (either reference or reading) can use a couple hundred pixels (10x10px area min)
+
+- Simple Average
+- Median? (the most middle color)
+- The most popular one
+- An average of some of the most popular
+- An average of the most middle colors
+- 
+
+(To define that, make a cool graph for each color reference first)
+
