@@ -50,43 +50,58 @@ toggleCameraBtn.addEventListener('click', async () => {
       console.error('Error accessing camera:', error);
     }
     setTimeout(()=>{
-      alert(`vW: ${document.querySelector("video").videoWidth}  &  vH: ${document.querySelector("video").videoHeight}`);
+      //alert(`vW: ${document.querySelector("video").videoWidth}  &  vH: ${document.querySelector("video").videoHeight}`);
     }, 500);
   }
 });
 
 measurementBtn.addEventListener('click', async () => {
+  console.time('Total time');
   const xSize = videoElement.videoWidth;
-  const ySize = videoElement.videoHeight
+  const ySize = videoElement.videoHeight;
   const offscreen = new OffscreenCanvas(xSize, ySize);
   const context = offscreen.getContext('2d');
-  //There's an OffscreenCanvasRenderingContext2D available... just saying (just try for performance gains)
-  
-  if (isCameraOn && videoElement.readyState >= 2){
+
+  if (isCameraOn && videoElement.readyState >= 2) {
+    console.time('Draw Image');
     context.drawImage(videoElement, 0, 0, xSize, ySize);
-    const imageData = context.getImageData(0,0,xSize, ySize);
+    console.timeEnd('Draw Image');
+
+    console.time('Get ImageData');
+    const imageData = context.getImageData(0, 0, xSize, ySize);
     const data = imageData.data;
+    console.timeEnd('Get ImageData');
 
-    var flatData = Array.from(data);
-    console.log(flatData);
+    console.time('Array Copy');
+    var flatData = data.slice();//Consider removing it entirely!!! Maybe we don't need a copy.
+    console.timeEnd('Array Copy');
+    //console.log(flatData);
 
+    console.time('Modify ImageData');
     for (let i = 0; i < data.length; i += 4) {
-      data[i    ] = Math.min(data[i    ] + 30, 255);     // R
+      data[i] = Math.min(data[i] + 30, 255);     // R
       data[i + 1] = Math.min(data[i + 1] + 30, 255); // G
       data[i + 2] = Math.min(data[i + 2] + 30, 255); // B
       // Alpha channel remains the same (data[i + 3])
     }
+    console.timeEnd('Modify ImageData');
 
+    console.time('Put ImageData');
     context.putImageData(imageData, 0, 0);
+    console.timeEnd('Put ImageData');
+
+    console.time('Convert to Blob');
     const blob = await offscreen.convertToBlob();
+    console.timeEnd('Convert to Blob');
+
+    console.time('Create Image');
     const img = new Image();
     img.src = URL.createObjectURL(blob);
+    document.getElementById("newImages").replaceChildren(img) ; //appendChild(img); //Correct??? yeah, maybe,hopefully
+    console.timeEnd('Create Image');
 
-    document.getElementById("newImages").appendChild(img);
+    //Blobs are... dangerous 
+    //(I oppened the image url on another page, then zoomed in, and when I came back to the page... the image had scaled up too!!!)
   }
+  console.timeEnd('Total time');
 });
-
-/*
-
-
-*/

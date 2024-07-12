@@ -47,3 +47,19 @@ Hopefully, each point (either reference or reading) can use a couple hundred pix
 
 (To define that, make a cool graph for each color reference first)
 
+## Real ToDo list:
+
+* Add "white-black-ish dashed squares printer function, to delimit reading zones
+* Read and start making the reading cleaner options...
+    * Average
+    * Median
+    * etc
+* Show those color on some huge filled boxes.
+* Another selector, for color calibration
+    * Plot the resulting line/interpolation graphic
+    * Show next to readed colors, the "resulting colors
+    * Finally... add some input/selector boxes with "desired color calibration tones" and 
+    show them next to the resulting colors.
+
+* Now it's time to show it to the world (see their struggles)
+    * Potentially add animations, sound... we will see. 
