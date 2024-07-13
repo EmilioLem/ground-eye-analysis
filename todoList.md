@@ -50,6 +50,9 @@ Hopefully, each point (either reference or reading) can use a couple hundred pix
 ## Real ToDo list:
 
 * ~~Add "white-black-ish dashed squares printer function, to delimit reading zones~~
+* Use a real Canvas instead of an extra image (simplify as much as possible) as shown on **v3Logic.js**
+* Setup temporary phisical webcam and a couple of color reference zones
+* Add some bounding boxes, different colors
 * Read and start making the reading cleaner options...
     * Average
     * Median
