@@ -29,11 +29,11 @@ body {
 
 
 
-#camera-stream, #camera-canvas {
+#camera-stream, #canvas {
     display: none;
 }
 
-#camera-stream, img {
+#camera-stream, img, #canvas {
     /*transform: scale(0.2); /* Reduce video display size by 5 times */
     width: auto; /* Scale video to fit container */
     height: 35vmin;
