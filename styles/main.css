@@ -33,11 +33,13 @@ body {
     display: none;
 }
 
-#camera-stream {
+#camera-stream, img {
     /*transform: scale(0.2); /* Reduce video display size by 5 times */
     width: auto; /* Scale video to fit container */
-    height: 30vh;
+    height: 35vmin;
+    /* Warning... long devices are a thing */
 }
+/* The new image is slightly above the live view... so place the new measurement elsewhere  */
 
 #toggle-camera-btn {
     padding: 10px 20px;

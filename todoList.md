@@ -49,7 +49,7 @@ Hopefully, each point (either reference or reading) can use a couple hundred pix
 
 ## Real ToDo list:
 
-* Add "white-black-ish dashed squares printer function, to delimit reading zones
+* ~~Add "white-black-ish dashed squares printer function, to delimit reading zones~~
 * Read and start making the reading cleaner options...
     * Average
     * Median

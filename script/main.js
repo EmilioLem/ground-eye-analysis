@@ -90,6 +90,12 @@ measurementBtn.addEventListener('click', async () => {
     context.putImageData(imageData, 0, 0);
     console.timeEnd('Put ImageData');
 
+
+    //drawBicolorDashedRect(context, 1030, 1030, 50, 50, 'white', 'black', 20);
+    //drawHollowRect(context, 0, 0, 200, 300, 'grey', 15);
+    //drawHollowRect(context, 0, 0, 190, 290, 'white', 5);
+    drawSimpleBoundingBox(context, 3, 3, 200, 200, 15, "blue");
+
     console.time('Convert to Blob');
     const blob = await offscreen.convertToBlob();
     console.timeEnd('Convert to Blob');
@@ -101,7 +107,68 @@ measurementBtn.addEventListener('click', async () => {
     console.timeEnd('Create Image');
 
     //Blobs are... dangerous 
+    //Or maybe not... 
     //(I oppened the image url on another page, then zoomed in, and when I came back to the page... the image had scaled up too!!!)
+    //But apparently the blob-image was not responsive to the page size.
   }
   console.timeEnd('Total time');
 });
+
+function drawSimpleBoundingBox(ctx, x, y, width, height, lineWidth, color){
+  ctx.fillStyle=color;
+  
+  ctx.fillRect(x, y, width, lineWidth); //Top bar
+  ctx.fillRect(x, y+height-lineWidth, width, lineWidth); //Bottom bar
+  
+  ctx.fillRect(x, y, lineWidth, height); //Left bar
+  ctx.fillRect(x+width-lineWidth, y, lineWidth, height); //Right bar
+}
+
+/*function drawHollowRect(ctx, x, y, width, height, color, lineWidth) {
+  ctx.strokeStyle = color;
+  ctx.lineWidth = lineWidth;
+  ctx.strokeRect(x, y, width, height);
+}
+
+function drawBicolorDashedRect(ctx, x, y, width, height, color1, color2, dashLength) {
+  ctx.lineWidth = 5;
+
+  // Function to draw a single dash
+  function drawDash(startX, startY, endX, endY, color) {
+    ctx.strokeStyle = color;
+    ctx.beginPath();
+    ctx.moveTo(startX, startY);
+    ctx.lineTo(endX, endY);
+    ctx.stroke();
+  }
+
+  // Helper function to draw dashes along a side
+  function drawSide(startX, startY, endX, endY, length, horizontal) {
+    let distance = horizontal ? Math.abs(endX - startX) : Math.abs(endY - startY);
+    for (let i = 0; i < distance; i += dashLength * 2) {
+      let dashStartX = horizontal ? startX + i : startX;
+      let dashEndX = horizontal ? Math.min(startX + i + dashLength, endX) : startX;
+      let dashStartY = horizontal ? startY : startY + i;
+      let dashEndY = horizontal ? startY : Math.min(startY + i + dashLength, endY);
+      drawDash(dashStartX, dashStartY, dashEndX, dashEndY, color1);
+
+      dashStartX = horizontal ? startX + i + dashLength : startX;
+      dashEndX = horizontal ? Math.min(startX + i + dashLength * 2, endX) : startX;
+      dashStartY = horizontal ? startY : startY + i + dashLength;
+      dashEndY = horizontal ? startY : Math.min(startY + i + dashLength * 2, endY);
+      drawDash(dashStartX, dashStartY, dashEndX, dashEndY, color2);
+    }
+  }
+
+  // Draw top side
+  drawSide(x, y, x + width, y, width, true);
+
+  // Draw right side
+  drawSide(x + width, y, x + width, y + height, height, false);
+
+  // Draw bottom side
+  drawSide(x + width, y + height, x, y + height, width, true);
+
+  // Draw left side
+  drawSide(x, y + height, x, y, height, false);
+}*/
