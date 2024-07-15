@@ -67,6 +67,7 @@ measurementBtn.addEventListener('click', async () => {
     context.drawImage(videoElement, 0, 0, xSize, ySize);
     console.timeEnd('Draw Image');
 
+
     console.time('Get ImageData');
     const imageData = context.getImageData(0, 0, xSize, ySize);
     const data = imageData.data;
@@ -93,6 +94,38 @@ measurementBtn.addEventListener('click', async () => {
   }
   console.timeEnd('Total time');
 });
+
+function readZone(ctx, x, y, w, h){
+  const zoneData = ctx.getImageData(x,y,w,h);
+  const theData = zoneData.data;
+  //The switch-aided color transformation function can be called here
+  
+  switch (document.getElementById("cSample").value){
+    case 'median':
+      //We will simply convert the RGB readings into 'whatever' the user selected: 
+      //convert(r,g,b,switchResult) -> return an array 
+      //(this should happen for every pixel, and just place them inside another array)
+      //Make some little graphs, to show how the colors are distributed (might be fun to watch)
+      //Then apply the filter, array_size independent 
+      for (let i = 0; i < theData.length; i += 4) {
+        theData[i] = Math.min(theData[i] + 30, 255);     // R
+        theData[i + 1] = Math.min(theData[i + 1] + 30, 255); // G
+        theData[i + 2] = Math.min(theData[i + 2] + 30, 255); // B
+        // Alpha channel remains the same (data[i + 3])
+      }
+    break;
+    default:
+      //Return the first... color
+    break;
+  }
+
+  //Once we have the "clean reading"... return... the same 
+  //array-like size-independent color_space-specified color conclusion. 
+}
+
+//The function should be called manually for each color test... maybe already storing 
+//desired-vs-readed color per channel, on a friendly matrix (to build the lookup table/function)
+//Finally... call the same function, and pass it trough the builded lookup artifact.
 
 function drawSimpleBoundingBox(ctx, x, y, width, height, lineWidth, color){
   ctx.fillStyle=color;

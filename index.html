@@ -19,6 +19,26 @@
 
 
     <div id="controls">
+        
+        <p>Color space: <select id="cSpace">
+            <option value="RGB" selected>RGB</option>
+            <option value="HSL">HSL</option>
+            <option value="HSV">HSV</option>
+            <option value="CMYK">CMYK</option>
+            <option value="af-of-med">af-of-med</option>
+        </select></p>
+
+        <p>Color sample technique: <select id="cSample">
+            <option value="average" selected>average</option>
+            <option value="median">median</option>
+            <option value="popular">popular</option>
+            <option value="av-of-pop">av-of-pop</option>
+            <option value="af-of-med">af-of-med</option>
+        </select></p>
+
+        <!-- Won't offer a third selector for color correction methods... -->
+
+
         <button id="toggle-camera-btn">Open Camera</button>
         <button id="take-measurement-btn">Take Measurement</button>
     </div>
@@ -30,13 +50,17 @@
 <!-- Hours worked the first week: 
     2 of Initial PWA research 
     + 3 of PWA+Cached setup
-    + 5 of camera setup/PWA+cached setup    ~ 10h at least-->
+    + 5 of camera setup/PWA+cached setup  
+    ~ 10h at least-->
 
 <!-- Hours worked 2nd week:
     3 of final camera configuration (size)
     + 5 of researching actual point approximation formulas
     + 1 + 2 of looking for speed improvements on image rendering, and bit of planning
     + 1.5 + 0.5 of Bounding Box Dilemma and Canvas performance realization     
-    Xh    --> 
+    + 4 of research and adding settings to the Page, more structuring!!!
+    ~ 17h    --> 
 
-<!-- Hours worked 3nd week: -->
+<!-- Hours worked 3nd week: 
+    Xh
+-->
