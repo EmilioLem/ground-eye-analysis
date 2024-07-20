@@ -8,12 +8,18 @@
     <link rel="stylesheet" href="styles/main.css">
     <link rel="icon" type="image/x-icon" href="./images/favicon.ico">
     <link rel="manifest" href="./manifest.json">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Remember to download and cache it!!!!! -->
 </head>
 <body>
     
     <!-- width="720" height="1280" -->
     <video id="camera-stream" autoplay muted></video>
+    <br>
     <canvas id="canvas"></canvas>
+    <br>
+    <canvas id="histogram" width="300" height="200"></canvas>
+    <br>
 
     <div id="newImages"></div>
 
@@ -24,8 +30,8 @@
             <option value="RGB" selected>RGB</option>
             <option value="HSL">HSL</option>
             <option value="HSV">HSV</option>
-            <option value="CMYK">CMYK</option>
-            <option value="af-of-med">af-of-med</option>
+            <option value="CMYK" disabled>CMYK</option>
+            <!-- CMYK is broken...  -->
         </select></p>
 
         <p>Color sample technique: <select id="cSample">
@@ -43,6 +49,7 @@
         <button id="take-measurement-btn">Take Measurement</button>
     </div>
 
+    <script src="./moreResources/chroma-min.js"></script>
     <script src="script/main.js"></script>
 </body>
 </html>

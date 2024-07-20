@@ -22,6 +22,8 @@ const measurementBtn = document.getElementById('take-measurement-btn');
 let mediaStream = null; // Store media stream reference
 let isCameraOn = false; // Boolean to track camera state
 
+let myChart = null;
+
 toggleCameraBtn.addEventListener('click', async () => {
   if (isCameraOn) {
     
@@ -60,7 +62,7 @@ measurementBtn.addEventListener('click', async () => {
   const canvas = document.getElementById("canvas");
   const xSize = canvas.width = videoElement.videoWidth;
   const ySize = canvas.height = videoElement.videoHeight;
-  const context = canvas.getContext('2d');
+  const context = canvas.getContext('2d', {willReadFrequently: true});
 
   if (isCameraOn && videoElement.readyState >= 2) {
     console.time('Draw Image');
@@ -68,6 +70,7 @@ measurementBtn.addEventListener('click', async () => {
     console.timeEnd('Draw Image');
 
 
+    //Starts the brightness increase
     console.time('Get ImageData');
     const imageData = context.getImageData(0, 0, xSize, ySize);
     const data = imageData.data;
@@ -78,17 +81,19 @@ measurementBtn.addEventListener('click', async () => {
       data[i] = Math.min(data[i] + 30, 255);     // R
       data[i + 1] = Math.min(data[i + 1] + 30, 255); // G
       data[i + 2] = Math.min(data[i + 2] + 30, 255); // B
-      // Alpha channel remains the same (data[i + 3])
     }
     console.timeEnd('Modify ImageData');
 
     console.time('Put ImageData');
     context.putImageData(imageData, 0, 0);
     console.timeEnd('Put ImageData');
+    //Ends the brightness increase
 
 
-    drawSimpleBoundingBox(context, 0, 0, 130, 130, 15, "black");
-    drawSimpleBoundingBox(context, 0, 150, 130, 130, 15, "white");
+    drawSimpleBoundingBox(context, 3, 3, 130, 130, 15, "black"); //Leaves 100^2 box for readings, corner 15, 15
+    drawSimpleBoundingBox(context, 0, 150, 130, 130, 15, "white"); //Leaves 100^2 box for readings, corner 15, 145
+
+    readZone(context, 15, 15, 100, 100);
 
     canvas.style.display='block';
   }
@@ -96,36 +101,143 @@ measurementBtn.addEventListener('click', async () => {
 });
 
 function readZone(ctx, x, y, w, h){
+  const cSpace = document.getElementById("cSpace");
   const zoneData = ctx.getImageData(x,y,w,h);
   const theData = zoneData.data;
   //The switch-aided color transformation function can be called here
+  const pixels = imageDataToPixels(theData);
   
-  switch (document.getElementById("cSample").value){
-    case 'median':
-      //We will simply convert the RGB readings into 'whatever' the user selected: 
-      //convert(r,g,b,switchResult) -> return an array 
-      //(this should happen for every pixel, and just place them inside another array)
-      //Make some little graphs, to show how the colors are distributed (might be fun to watch)
-      //Then apply the filter, array_size independent 
-      for (let i = 0; i < theData.length; i += 4) {
-        theData[i] = Math.min(theData[i] + 30, 255);     // R
-        theData[i + 1] = Math.min(theData[i + 1] + 30, 255); // G
-        theData[i + 2] = Math.min(theData[i + 2] + 30, 255); // B
-        // Alpha channel remains the same (data[i + 3])
-      }
-    break;
+  let alteredColorSpace = convertColorSpace(pixels, cSpace.value);
+  console.log(cSpace.value);
+  console.log(alteredColorSpace);
+
+  let maxValues;
+  switch (cSpace.value) {
+    case 'RGB':
+        maxValues = [255, 255, 255];
+        break;
+    case 'HSL':
+    case 'HSV':
+        maxValues = [360, 1, 1];
+        break;
+    case 'CMYK':
+        maxValues = [1, 1, 1, 1];
+        break;
     default:
-      //Return the first... color
-    break;
+        throw new Error('Unsupported color space');
   }
 
-  //Once we have the "clean reading"... return... the same 
-  //array-like size-independent color_space-specified color conclusion. 
+  const histograms = generateHistogram(alteredColorSpace, maxValues);
+  plotHistogram(histograms);
+
+
+  
 }
 
 //The function should be called manually for each color test... maybe already storing 
 //desired-vs-readed color per channel, on a friendly matrix (to build the lookup table/function)
 //Finally... call the same function, and pass it trough the builded lookup artifact.
+
+function normalizeValue(value, max) {
+  return Math.round(value * 255 / max);
+}
+
+function generateHistogram(pixels, maxValues) {
+  const numBins = 256;
+  const numChannels = maxValues.length;
+  const histograms = Array.from({ length: numChannels }, () => new Array(numBins).fill(0));
+
+  pixels.forEach(pixel => {
+      for (let i = 0; i < numChannels; i++) {
+          const normalizedValue = normalizeValue(pixel[i], maxValues[i]);
+          histograms[i][normalizedValue]++;
+      }
+  });
+
+  return histograms;
+}
+
+function plotHistogram(histograms) {
+  const labels = Array.from({ length: 256 }, (_, i) => i);
+  const data = {
+      labels: labels,
+      datasets: histograms.map((histogram, index) => ({
+          label: `Channel ${index + 1}`,
+          backgroundColor: `rgba(${255 - index * 60}, ${index * 60}, ${255 - index * 60}, 0.5)`,
+          borderColor: `rgba(${255 - index * 60}, ${index * 60}, ${255 - index * 60}, 1)`,
+          data: histogram,
+          fill: false,
+          borderWidth: 1
+      }))
+  };
+
+  const ctx = document.getElementById('histogram').getContext('2d');
+  if (myChart) {
+    myChart.destroy();
+  }
+  myChart = new Chart(ctx, {
+    type: 'line',
+    data: data,
+    options: {
+      responsive: false, //Crucial to set desired size!!!
+      //maintainAspectRatio: false, // Just remember this exists :)
+      scales: {
+                x: {
+                  title: {
+                    display: true,
+                    text: 'Value'
+                  }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Frequency'
+                      }
+                    }
+              }
+              }
+  });
+}
+            
+
+
+/// Phase 22222222222222222222222222222222222222
+////////////////////////////////
+function convertColorSpace(pixels, colorSpace) {
+  //const chroma = require('chroma-js'); // Import chroma-js library
+  switch (colorSpace) {
+    case 'RGB':
+      return pixels;
+    case 'HSL':
+      return pixels.map(([r, g, b]) => {
+        let [h, s, l] = chroma([r, g, b]).hsl();
+        h = isNaN(h) ? 0 : h;
+        return [h, s, l];
+      });
+    case 'HSV':
+      return pixels.map(([r, g, b]) => {
+        let [h, s, v] = chroma([r, g, b]).hsv();
+        h = isNaN(h) ? 0 : h;
+        return [h, s, v];
+      });
+    case 'CMYK':
+      return pixels.map(([r, g, b]) => chroma([r, g, b]).cmyk());
+    default:
+      throw new Error('Unsupported color space');
+  }
+}
+
+function imageDataToPixels(data) {
+  const pixels = [];
+  for (let i = 0; i < data.length; i += 4) {
+    const r = data[i];
+    const g = data[i + 1];
+    const b = data[i + 2];
+    // Skip alpha channel
+    pixels.push([r, g, b]);
+  }
+  return pixels;
+}
 
 function drawSimpleBoundingBox(ctx, x, y, width, height, lineWidth, color){
   ctx.fillStyle=color;
