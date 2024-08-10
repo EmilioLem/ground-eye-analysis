@@ -53,11 +53,11 @@ Hopefully, each point (either reference or reading) can use a couple hundred pix
 * ~~Use a real Canvas instead of an extra image (simplify as much as possible) as shown on **v3Logic.js**~~
 * ~~Add some bounding boxes, different colors~~
 * ~~Setup temporary phisical webcam and a couple of color reference zones~~
-* Read and start making the reading cleaner options...
-    * Average
+* ~~Read and start making the reading cleaner options...~~
+    * ~~Average~~
     * Median
     * etc
-* Show those color on some huge filled boxes.
+* ~~Show those color on some huge filled boxes.~~
 * Another selector, for color calibration
     * Plot the resulting line/interpolation graphic
     * Show next to readed colors, the "resulting colors

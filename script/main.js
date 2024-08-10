@@ -70,7 +70,7 @@ measurementBtn.addEventListener('click', async () => {
     console.timeEnd('Draw Image');
 
 
-    //Starts the brightness increase
+    /*/Starts the brightness increase
     console.time('Get ImageData');
     const imageData = context.getImageData(0, 0, xSize, ySize);
     const data = imageData.data;
@@ -87,18 +87,24 @@ measurementBtn.addEventListener('click', async () => {
     console.time('Put ImageData');
     context.putImageData(imageData, 0, 0);
     console.timeEnd('Put ImageData');
-    //Ends the brightness increase
+    //Ends the brightness increase*/
 
 
-    drawSimpleBoundingBox(context, 3, 3, 130, 130, 15, "black"); //Leaves 100^2 box for readings, corner 15, 15
+    drawSimpleBoundingBox(context, 0, 0, 130, 130, 15, "black"); //Leaves 100^2 box for readings, corner 15, 15
     drawSimpleBoundingBox(context, 0, 150, 130, 130, 15, "white"); //Leaves 100^2 box for readings, corner 15, 145
 
-    readZone(context, 15, 15, 100, 100);
+    let theColor = readZone(context, 15, 15, 100, 100);
+    drawResultingColor(context, 130, 15, 100, 100, theColor);
 
     canvas.style.display='block';
   }
   console.timeEnd('Total time');
 });
+
+function drawResultingColor(ctx, x, y, w, h, color){
+  ctx.fillStyle = color;
+  ctx.fillRect(x, y, w, h);
+}
 
 function readZone(ctx, x, y, w, h){
   const cSpace = document.getElementById("cSpace");
@@ -107,9 +113,9 @@ function readZone(ctx, x, y, w, h){
   //The switch-aided color transformation function can be called here
   const pixels = imageDataToPixels(theData);
   
-  let alteredColorSpace = convertColorSpace(pixels, cSpace.value);
+  let alteredColorSpace = convertFromRGB(pixels, cSpace.value);
   console.log(cSpace.value);
-  console.log(alteredColorSpace);
+  //console.log(alteredColorSpace);
 
   let maxValues;
   switch (cSpace.value) {
@@ -130,10 +136,26 @@ function readZone(ctx, x, y, w, h){
   const histograms = generateHistogram(alteredColorSpace, maxValues);
   plotHistogram(histograms);
 
+  newColor = Array(maxValues.length).fill(0);
+  for(let i=0; i<alteredColorSpace.length; i++){
+    //console.log("adding");
+    for(let j=0; j<maxValues.length; j++){
+      newColor[j]+=alteredColorSpace[i][j];
+    }
+  }
+  newColor = newColor.map(x => x/alteredColorSpace.length);
+  console.log(newColor);
+  nowRGB = convertToRGB(newColor, cSpace.value);
+  console.log(nowRGB);
+  document.getElementById("colorR").innerText = `rgb(${Math.round(nowRGB[0])}, ${Math.round(nowRGB[1])}, ${Math.round(nowRGB[2])})`;
 
+  return `rgb(${nowRGB[0]}, ${nowRGB[1]}, ${nowRGB[2]})`;
   
 }
 
+function average(thePixels){
+  return color;
+}
 //The function should be called manually for each color test... maybe already storing 
 //desired-vs-readed color per channel, on a friendly matrix (to build the lookup table/function)
 //Finally... call the same function, and pass it trough the builded lookup artifact.
@@ -189,9 +211,10 @@ function plotHistogram(histograms) {
                   }
                 },
                 y: {
+                    type: 'logarithmic',
                     title: {
                         display: true,
-                        text: 'Frequency'
+                        text: 'Frequency (log)'
                       }
                     }
               }
@@ -203,7 +226,7 @@ function plotHistogram(histograms) {
 
 /// Phase 22222222222222222222222222222222222222
 ////////////////////////////////
-function convertColorSpace(pixels, colorSpace) {
+function convertFromRGB(pixels, colorSpace) {
   //const chroma = require('chroma-js'); // Import chroma-js library
   switch (colorSpace) {
     case 'RGB':
@@ -226,6 +249,24 @@ function convertColorSpace(pixels, colorSpace) {
       throw new Error('Unsupported color space');
   }
 }
+
+function convertToRGB(color, colorSpace) {
+  //const chroma = require('chroma-js'); // Ensure chroma-js is imported if using Node.js
+
+  switch (colorSpace) {
+    case 'RGB':
+      return color;
+    case 'HSL':
+      return chroma.hsl(...color).rgb();
+    case 'HSV':
+      return chroma.hsv(...color).rgb();
+    case 'CMYK':
+      return chroma.cmyk(...color).rgb();
+    default:
+      throw new Error('Unsupported color space');
+  }
+}
+
 
 function imageDataToPixels(data) {
   const pixels = [];
