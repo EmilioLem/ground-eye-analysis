@@ -4,6 +4,9 @@ body {
     align-items: center;
     min-height: 100vh;
     margin: 0;
+    color: ;
+    background: linear-gradient(snow, seashell);
+    background: linear-gradient(mintcream, moccasin);
 }
 
 /*#camera-container {
@@ -23,8 +26,8 @@ body {
     right: 20px;  /* Adjust horizontal spacing from right */
     display: flex;
     flex-direction: column;
-    gap: 5px;
-    font-size: 2.2vmin;
+    /* gap: 0px; */
+    font-size: 2.5vmin;
 }
 select{
     font-size: inherit;
@@ -57,7 +60,7 @@ select{
     border: none;
     border-radius: 15px;
     cursor: pointer;
-    font-size: 3vmin;
+    font-size: 3.5vmin;
 }
 
 #take-measurement-btn {
@@ -68,6 +71,6 @@ select{
     border: none;
     border-radius: 15px;
     cursor: pointer;
-    font-size: 2.5vmin;
+    font-size: 3vmin;
     opacity: 0.5; 
 }

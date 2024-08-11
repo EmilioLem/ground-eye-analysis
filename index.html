@@ -8,30 +8,23 @@
     <link rel="stylesheet" href="styles/main.css">
     <link rel="icon" type="image/x-icon" href="./images/favicon.ico">
     <link rel="manifest" href="./manifest.json">
-    <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> -->
-    <!-- Remember to download and cache it!!!!! -->
 </head>
 <body>
     
-    <!-- width="720" height="1280" -->
     <video id="camera-stream" autoplay muted></video>
     <br>
     <canvas id="canvas"></canvas>
     <br>
-    <canvas id="histogram" width="300" height="200"></canvas>
-    <br>
-
-    <div id="newImages"></div>
-
-
+    <!-- <canvas id="histogram" width="300" height="300"></canvas> -->    
+    
     <div id="controls">
         
-        <p>Color space: <select id="cSpace">
+        <!-- <p>Color space: <select id="cSpace">
             <option value="RGB" selected>RGB</option>
             <option value="HSL">HSL</option>
             <option value="HSV">HSV</option>
             <option value="CMYK" disabled>CMYK</option>
-            <!-- CMYK is broken...  -->
+            CMYK is broken... 
         </select></p>
 
         <p>Color sample technique: <select id="cSample">
@@ -40,16 +33,17 @@
             <option value="popular" disabled>popular</option>
             <option value="av-of-pop" disabled>av-of-pop</option>
             <option value="af-of-med" disabled>af-of-med</option>
-        </select></p>
-
-        <!-- Won't offer a third selector for color correction methods... -->
-        <p>Color readed: <span id="colorR"></span></p>
-
-
+        </select></p> -->
+        
+        <p><span id="colorR"></span></p>
+        
+        
         <button id="toggle-camera-btn">Open Camera</button>
         <button id="take-measurement-btn">Take Measurement</button>
     </div>
-
+    
+    <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> -->
+    <!-- Remember to download and cache it!!!!! -->
     <script src="./moreResources/chart.js"></script>
     <script src="./moreResources/chroma-min.js"></script>
     <script src="script/main.js"></script>
@@ -62,18 +56,18 @@
     + 5 of camera setup/PWA+cached setup  
     ~ 10h at least-->
 
-<!-- Hours worked 2nd week:
-    3 of final camera configuration (size)
-    + 5 of researching actual point approximation formulas
-    + 1 + 2 of looking for speed improvements on image rendering, and bit of planning
-    + 1.5 + 0.5 of Bounding Box Dilemma and Canvas performance realization     
-    + 4 of research and adding settings to the Page, more structuring!!!
-    ~ 17h    --> 
-
-<!-- Hours worked 3nd week (weekend): 
-    + 3 of setting up functions to clean the markers data, and testing for real
-
-    Xh
--->
-
-<!-- Remember, the ~/coeficientThing.js file has the interpolation code -->
+    <!-- Hours worked 2nd week:
+        3 of final camera configuration (size)
+        + 5 of researching actual point approximation formulas
+        + 1 + 2 of looking for speed improvements on image rendering, and bit of planning
+        + 1.5 + 0.5 of Bounding Box Dilemma and Canvas performance realization     
+        + 4 of research and adding settings to the Page, more structuring!!!
+        ~ 17h    --> 
+        
+        <!-- Hours worked 3nd week (weekend): 
+            + 3 of setting up functions to clean the markers data, and testing for real
+            
+            Xh
+        -->
+        
+        <!-- Remember, the ~/coeficientThing.js file has the interpolation code -->

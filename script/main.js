@@ -107,13 +107,13 @@ function drawResultingColor(ctx, x, y, w, h, color){
 }
 
 function readZone(ctx, x, y, w, h){
-  const cSpace = document.getElementById("cSpace");
+  //const cSpace = document.getElementById("cSpace");
   const zoneData = ctx.getImageData(x,y,w,h);
   const theData = zoneData.data;
   //The switch-aided color transformation function can be called here
   const pixels = imageDataToPixels(theData);
   
-  let alteredColorSpace = convertFromRGB(pixels, cSpace.value);
+  /*let alteredColorSpace = convertFromRGB(pixels, cSpace.value);
   console.log(cSpace.value);
   //console.log(alteredColorSpace);
 
@@ -134,22 +134,23 @@ function readZone(ctx, x, y, w, h){
   }
 
   const histograms = generateHistogram(alteredColorSpace, maxValues);
-  plotHistogram(histograms);
+  plotHistogram(histograms);*/
 
-  newColor = Array(maxValues.length).fill(0);
-  for(let i=0; i<alteredColorSpace.length; i++){
+  newColor = Array(3).fill(0); //'3' Used to be maxValues.length
+  for(let i=0; i<pixels.length; i++){ // 'pixels' used to be alteredColorSpace
     //console.log("adding");
-    for(let j=0; j<maxValues.length; j++){
-      newColor[j]+=alteredColorSpace[i][j];
+    for(let j=0; j<3; j++){ //'3' Used to be maxValues.length
+      newColor[j]+=pixels[i][j]; // 'pixels' used to be alteredColorSpace
     }
   }
-  newColor = newColor.map(x => x/alteredColorSpace.length);
+  newColor = newColor.map(x => x/pixels.length); // 'pixels' used to be alteredColorSpace
   console.log(newColor);
-  nowRGB = convertToRGB(newColor, cSpace.value);
+  /*nowRGB = convertToRGB(newColor, cSpace.value);
   console.log(nowRGB);
-  document.getElementById("colorR").innerText = `rgb(${Math.round(nowRGB[0])}, ${Math.round(nowRGB[1])}, ${Math.round(nowRGB[2])})`;
-
-  return `rgb(${nowRGB[0]}, ${nowRGB[1]}, ${nowRGB[2]})`;
+  */
+  document.getElementById("colorR").innerText = 
+  `Color readed: rgb(${Math.round(newColor[0])}, ${Math.round(newColor[1])}, ${Math.round(newColor[2])})`;
+  return `rgb(${newColor[0]}, ${newColor[1]}, ${newColor[2]})`;
   
 }
 
