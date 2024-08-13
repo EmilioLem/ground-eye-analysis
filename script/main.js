@@ -38,9 +38,10 @@ toggleCameraBtn.addEventListener('click', async () => {
       //Potentially scalable to SQFHD 1920*1920
       const constraints = {
         video: {
-          facingMode: "environment",
-          height: { min: 1080, ideal: 1080, max: 1080 }, // Instagram square format
-          width: { min: 1080, ideal: 1080, max: 1080 }, //
+          facingMode: "environment", //// Instagram square format
+          height: { idea: 1080}, //min: 1080, ideal: 1080, max: 1080 
+          width: { ideal: 1080}, //min: 1080, ideal: 1080, max: 1080 
+          aspectRatio: 1
         }
       };
       mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
@@ -62,13 +63,15 @@ measurementBtn.addEventListener('click', async () => {
   const canvas = document.getElementById("canvas");
   const xSize = canvas.width = videoElement.videoWidth;
   const ySize = canvas.height = videoElement.videoHeight;
+  
+  
   const context = canvas.getContext('2d', {willReadFrequently: true});
-
+  
   if (isCameraOn && videoElement.readyState >= 2) {
-    console.time('Draw Image');
-    context.drawImage(videoElement, 0, 0, xSize, ySize);
-    console.timeEnd('Draw Image');
+    console.log({xSize});
+    console.log({ySize});
 
+    context.drawImage(videoElement, 0, 0, xSize, ySize);
 
     /*/Starts the brightness increase
     console.time('Get ImageData');
@@ -90,11 +93,13 @@ measurementBtn.addEventListener('click', async () => {
     //Ends the brightness increase*/
 
 
-    drawSimpleBoundingBox(context, 0, 0, 130, 130, 15, "black"); //Leaves 100^2 box for readings, corner 15, 15
-    drawSimpleBoundingBox(context, 0, 150, 130, 130, 15, "white"); //Leaves 100^2 box for readings, corner 15, 145
+    drawSimpleBoundingBox(context, 0, 0, 130, 130, 15, [0, 0, 0]); //Leaves 100^2 box for readings, corner 15, 15
+    drawSimpleBoundingBox(context, 0, 150, 130, 130, 15, [0, 128, 255]); //Leaves 100^2 box for readings, corner 15, 145
 
     let theColor = readZone(context, 15, 15, 100, 100);
     drawResultingColor(context, 130, 15, 100, 100, theColor);
+
+    //drawElaborateBoundingBox(context, 0, 0, 200, 130, [0, 128, 255]);
 
     canvas.style.display='block';
   }
@@ -281,7 +286,7 @@ function imageDataToPixels(data) {
   return pixels;
 }
 
-function drawSimpleBoundingBox(ctx, x, y, width, height, lineWidth, color){
+/*function drawSimpleBoundingBox(ctx, x, y, width, height, lineWidth, color){
   ctx.fillStyle=color;
   
   ctx.fillRect(x, y, width, lineWidth); //Top bar
@@ -289,4 +294,44 @@ function drawSimpleBoundingBox(ctx, x, y, width, height, lineWidth, color){
   
   ctx.fillRect(x, y, lineWidth, height); //Left bar
   ctx.fillRect(x+width-lineWidth, y, lineWidth, height); //Right bar
+}*/
+
+function drawDecoratedRect(ctx, x, y, width, height, color) {
+  // Calculate the inverse color
+  const inverseColor = [255 - color[0], 255 - color[1], 255 - color[2]];
+  const colorString = `rgb(${color[0]}, ${color[1]}, ${color[2]})`;
+  const inverseColorString = `rgb(${inverseColor[0]}, ${inverseColor[1]}, ${inverseColor[2]})`;
+
+  // Determine the size of each sector (9 sectors)
+  const numSectors = 9;
+  const sectorWidth = width / numSectors;
+  const sectorHeight = height / numSectors;
+
+  // Draw the sectors with intercalated colors
+  for (let i = 0; i < numSectors; i++) {
+      const currentColor = i % 2 === 0 ? inverseColorString : colorString;
+      ctx.fillStyle = currentColor;
+
+      if (width > height) {
+          // Horizontal division (for top and bottom bars)
+          ctx.fillRect(x + i * sectorWidth, y, sectorWidth, height);
+      } else {
+          // Vertical division (for left and right bars)
+          ctx.fillRect(x, y + i * sectorHeight, width, sectorHeight);
+      }
+  }
+}
+
+function drawSimpleBoundingBox(ctx, x, y, width, height, lineWidth, color) {
+  // Top bar
+  drawDecoratedRect(ctx, x, y, width, lineWidth, color);
+
+  // Bottom bar
+  drawDecoratedRect(ctx, x, y + height - lineWidth, width, lineWidth, color);
+
+  // Left bar
+  drawDecoratedRect(ctx, x, y, lineWidth, height, color);
+
+  // Right bar
+  drawDecoratedRect(ctx, x + width - lineWidth, y, lineWidth, height, color);
 }

@@ -55,8 +55,8 @@ Hopefully, each point (either reference or reading) can use a couple hundred pix
 * ~~Setup temporary phisical webcam and a couple of color reference zones~~
 * ~~Read and start making the reading cleaner options...~~
     * ~~Average~~
-    * Median
-    * etc
+    * ~~Median~~
+    * ~~etc~~
 * ~~Show those color on some huge filled boxes.~~
 * Another selector, for color calibration
     * Plot the resulting line/interpolation graphic
