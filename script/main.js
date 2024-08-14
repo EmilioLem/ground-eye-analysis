@@ -53,6 +53,27 @@ function predictColor(){
 xRange.addEventListener('input', predictColor);
 yRange.addEventListener('input', predictColor);
 
+removeMarker.addEventListener('click', ()=>{
+  let res = Number(prompt("Which box do you want to delete?"));
+  
+  if(!res && res!=0){
+    //console.log(res);
+    alert("You did not entered a valid number");  
+  }
+  else if(res>allEtiquetes.length || res<1){
+    //console.log(res);
+    alert("Out of boundaries");
+  }
+  else if(res != Math.round(res)){
+    alert("That's not an integer!!!");
+  }
+  console.log(res);
+
+  allEtiquetes.splice(res-1, 1);
+  localStorage.setItem("myArray", JSON.stringify(allEtiquetes));
+  
+});
+
 addMarker.addEventListener('click', ()=>{
   if(!isAddingNewBox){
     addMarker.innerText = "Click to save";
@@ -168,19 +189,19 @@ measurementBtn.addEventListener('click', async () => {
     const ySize = canvas.height = videoElement.videoHeight;
     const context = canvas.getContext('2d', {willReadFrequently: true});
 
-    console.log({xSize});
-    console.log({ySize});
-
     context.drawImage(videoElement, 0, 0, xSize, ySize);
 
 
-    drawSimpleBoundingBox(context, 0, 0, 130, 130, 15, [0, 0, 0]); //Leaves 100^2 box for readings, corner 15, 15
-    drawSimpleBoundingBox(context, 0, 150, 130, 130, 15, [0, 128, 255]); //Leaves 100^2 box for readings, corner 15, 145
+    //drawSimpleBoundingBox(context, 0, 0, 130, 130, 15, [0, 0, 0]); //Leaves 100^2 box for readings, corner 15, 15
+    drawSimpleBoundingBox(context, xSize/2-130/2, ySize/2-130/2, 130, 130, 15, [0, 128, 255]); //Leaves 100^2 box for readings, corner 15, 145
+    drawPreviousMarkers(context);
 
-    let theColor = readZone(context, 15, 15, 100, 100);
-    drawResultingColor(context, 130, 15, 100, 100, theColor);
+    let theColor = readZone(context, xSize/2-130/2+15, ySize/2-130/2+15, 100, 100);
+    drawResultingColor(context, xSize/2-130/2+15, ySize/2-130/2+15, 100, 100, theColor);
 
-    //drawElaborateBoundingBox(context, 0, 0, 200, 130, [0, 128, 255]);
+    document.getElementById("colorR").innerText = 
+  `Color readed: rgb(${theColor[0]}, ${theColor[1]}, ${theColor[2]})
+   close to corner x:${xSize/2-130/2+15}, y:${ySize/2-130/2+15}`;
 
     canvas.style.display='block';
   }else{
@@ -251,13 +272,11 @@ function readZone(ctx, x, y, w, h){
     }
   }
   newColor = newColor.map(x => Math.round(x/pixels.length)); // 'pixels' used to be alteredColorSpace
-  console.log(newColor);
+  //console.log(newColor);
   /*nowRGB = convertToRGB(newColor, cSpace.value);
   console.log(nowRGB);
   */
-  document.getElementById("colorR").innerText = 
-  `Color readed: rgb(${Math.round(newColor[0])}, ${Math.round(newColor[1])}, ${Math.round(newColor[2])})
-   on x:${x}, y:${y}`;
+  
   return newColor;
   
 }
