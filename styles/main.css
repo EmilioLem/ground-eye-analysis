@@ -28,6 +28,30 @@ body {
     /* gap: 0px; */
     font-size: 2.5vmin;
 }
+#topControls{
+    position: absolute; /* Position buttons at the bottom */
+    top: 10px; /* Adjust spacing from bottom */
+    right: 20px;  /* Adjust horizontal spacing from right */
+    display: flex;
+    flex-direction: column;
+    /* gap: 0px; */
+    font-size: 2.5vmin;
+}
+#otherControls{
+    position: absolute; /* Position buttons at the bottom */
+    bottom: 20px; /* Adjust spacing from bottom */
+    left: 20px;  /* Adjust horizontal spacing from right */
+    display: flex;
+    flex-direction: column;
+    gap: -65px;
+    font-size: 2.5vmin;
+    display: none;
+}
+#otherControls>p{
+    gap: 0px;
+    margin: 5px;
+}
+/* The number inputs should also be scaled up on vmin!!! */
 select{
     font-size: inherit;
 }
@@ -62,6 +86,18 @@ select{
     font-size: 3.5vmin;
 }
 
+#calibrate-sensor-btn{
+    margin-top: 10px;
+    background-color: mediumseagreen;
+    opacity: 0.8;
+    padding: 10px 20px;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 3vmin;
+}
+
 #take-measurement-btn {
     margin-top: 10px;
     padding: 10px 20px;
@@ -72,4 +108,28 @@ select{
     cursor: pointer;
     font-size: 3vmin;
     opacity: 0.5; 
+}
+/* Now the top controls */
+#addMarker{
+    padding: 10px 20px;
+    background-color: tan;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 2vmin;
+    opacity: 0.9; 
+    display: none;
+}
+#removeMarker{
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: darkkhaki;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 2vmin;
+    opacity: 0.9; 
+    display: none;
 }

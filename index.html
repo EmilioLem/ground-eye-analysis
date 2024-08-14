@@ -17,6 +17,19 @@
     <br>
     <!-- <canvas id="histogram" width="300" height="300"></canvas> -->    
     
+    <div id="topControls">
+        <button id="addMarker">Add marker</button>
+        <button id="removeMarker">Remove marker</button>
+    </div>
+
+    <div id="otherControls">
+        <p>X position: <input type="range" id="xRange" min="1" max="1080" value="540"></p>
+        <p>Y position: <input type="range" id="yRange" min="1" max="1080" value="540"></p>
+        <p>Red value: <input type="number" id="rValue" min="0" max="255" value="128"></p>
+        <p>Green value: <input type="number" id="gValue" min="0" max="255" value="128"></p>
+        <p>Blue value: <input type="number" id="bValue" min="0" max="255" value="128"></p>
+    </div>
+
     <div id="controls">
         
         <!-- <p>Color space: <select id="cSpace">
@@ -39,6 +52,7 @@
         
         
         <button id="toggle-camera-btn">Open Camera</button>
+        <button id="calibrate-sensor-btn">Calibrate Sensor</button>
         <button id="take-measurement-btn">Take Measurement</button>
     </div>
     
@@ -56,18 +70,22 @@
     + 5 of camera setup/PWA+cached setup  
     ~ 10h at least-->
 
-    <!-- Hours worked 2nd week:
-        3 of final camera configuration (size)
-        + 5 of researching actual point approximation formulas
-        + 1 + 2 of looking for speed improvements on image rendering, and bit of planning
-        + 1.5 + 0.5 of Bounding Box Dilemma and Canvas performance realization     
-        + 4 of research and adding settings to the Page, more structuring!!!
-        ~ 17h    --> 
+<!-- Hours worked 2nd week:
+    3 of final camera configuration (size)
+    + 5 of researching actual point approximation formulas
+    + 1 + 2 of looking for speed improvements on image rendering, and bit of planning
+    + 1.5 + 0.5 of Bounding Box Dilemma and Canvas performance realization     
+    + 4 of research and adding settings to the Page, more structuring!!!
+    ~ 17h    --> 
+    
+<!-- Hours worked 3nd week (weekend): 
+    + 3 of setting up functions to clean the markers data, and testing for real
+    ~ 4 h
+-->
         
-        <!-- Hours worked 3nd week (weekend): 
-            + 3 of setting up functions to clean the markers data, and testing for real
-            
-            Xh
-        -->
-        
-        <!-- Remember, the ~/coeficientThing.js file has the interpolation code -->
+<!-- 
+    + 5 of setting up beauty intercalated marker boxes and prettify more
+    + 4 of final marker saving!!!
+-->
+        <!-- Remember, the ~/coeficientThing.js file has the interpolation code 
+            And remember that the numberInputs have to be scaled with vmin-->

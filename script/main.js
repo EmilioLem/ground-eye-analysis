@@ -16,13 +16,72 @@ if ('serviceWorker' in navigator) {
 
 const videoElement = document.getElementById('camera-stream');
 
+const addMarker = document.getElementById("addMarker");
+const removeMarker = document.getElementById("removeMarker");
+const otherControls = document.getElementById("otherControls");
+
 const toggleCameraBtn = document.getElementById('toggle-camera-btn');
+const calibrateCameraBtn = document.getElementById('calibrate-sensor-btn');
 const measurementBtn = document.getElementById('take-measurement-btn');
+const canvas = document.getElementById("canvas");
 
 let mediaStream = null; // Store media stream reference
 let isCameraOn = false; // Boolean to track camera state
+let isCalibrating = false;
+
+let isAddingNewBox = false;
+let intervalID;
+let newColorisActive = false;
+const xRange = document.getElementById("xRange");
+const yRange = document.getElementById("yRange");
+const rValue = document.getElementById("rValue");
+const gValue = document.getElementById("gValue");
+const bValue = document.getElementById("bValue");
+
+let storedArray = localStorage.getItem("myArray");
+let allEtiquetes = storedArray? JSON.parse(storedArray) : [];
 
 let myChart = null;
+
+function predictColor(){
+  const context = canvas.getContext('2d', {willReadFrequently: true});
+  let theColor = readZone(context, Number(xRange.value)+15, Number(yRange.value)+15, 100, 100);
+  rValue.value = theColor[0];
+  gValue.value = theColor[1];
+  bValue.value = theColor[2];
+}
+xRange.addEventListener('input', predictColor);
+yRange.addEventListener('input', predictColor);
+
+addMarker.addEventListener('click', ()=>{
+  if(!isAddingNewBox){
+    addMarker.innerText = "Click to save";
+    removeMarker.style.display = "none";
+    otherControls.style.display = "block"; //And reset the values
+    xRange.value = 540;
+    yRange.value = 540;
+    rValue.value = 80;
+    gValue.value = 160;
+    bValue.value = 240;
+    
+    newColorisActive = true;
+    isAddingNewBox = true;
+  }else{ 
+    //Saving logic goes here
+    allEtiquetes.push([Number(xRange.value), Number(yRange.value), 130, 130, 15, [Number(rValue.value), Number(gValue.value), Number(bValue.value)]]);
+                //x, y, w, h, border, arrayWithColor
+    localStorage.setItem("myArray", JSON.stringify(allEtiquetes));
+
+    newColorisActive = false;
+    addMarker.innerText = "AddMarker";
+    isAddingNewBox = false;
+    removeMarker.style.display = "block";
+    otherControls.style.display = "none";
+
+    const context = canvas.getContext('2d', {willReadFrequently: true});
+    
+  }
+});
 
 toggleCameraBtn.addEventListener('click', async () => {
   if (isCameraOn) {
@@ -52,45 +111,67 @@ toggleCameraBtn.addEventListener('click', async () => {
     } catch (error) {
       console.error('Error accessing camera:', error);
     }
-    setTimeout(()=>{
-      //alert(`vW: ${document.querySelector("video").videoWidth}  &  vH: ${document.querySelector("video").videoHeight}`);
-    }, 500);
+  }
+});
+
+calibrateCameraBtn.addEventListener('click', async ()=>{
+  if(isCameraOn && videoElement.readyState >= 2 && !isCalibrating){
+    const xSize = canvas.width = videoElement.videoWidth;
+    const ySize = canvas.height = videoElement.videoHeight;
+
+    const context = canvas.getContext('2d', {willReadFrequently: true});
+
+    intervalID = setInterval(()=>{
+      context.drawImage(videoElement, 0, 0, xSize, ySize);
+      drawPreviousMarkers(context);
+    }, 100);
+
+    canvas.style.display='block';
+    
+    addMarker.innerText = "AddMarker";
+    addMarker.style.display = "block";
+    removeMarker.style.display = "block";
+    isAddingNewBox = false;
+
+    toggleCameraBtn.style.display = "none";
+    calibrateCameraBtn.innerText = "Finish calibration";
+    measurementBtn.style.display = "none";
+    isCalibrating = true;
+
+    
+  }else if(isCalibrating){
+    isCalibrating = false;
+    canvas.style.display='none';
+
+    addMarker.style.display = "none";
+    removeMarker.style.display = "none";
+    otherControls.style.display = "none";
+    isAddingNewBox = false;
+    newColorisActive = false;
+    clearInterval(intervalID);
+
+    toggleCameraBtn.style.display = "initial";
+    calibrateCameraBtn.innerText = "Calibrate Sensor";
+    measurementBtn.style.display = "initial";
+  }else{
+    alert("Open the camera first");
   }
 });
 
 measurementBtn.addEventListener('click', async () => {
   console.time('Total time');
-  const canvas = document.getElementById("canvas");
-  const xSize = canvas.width = videoElement.videoWidth;
-  const ySize = canvas.height = videoElement.videoHeight;
   
   
-  const context = canvas.getContext('2d', {willReadFrequently: true});
   
   if (isCameraOn && videoElement.readyState >= 2) {
+    const xSize = canvas.width = videoElement.videoWidth;
+    const ySize = canvas.height = videoElement.videoHeight;
+    const context = canvas.getContext('2d', {willReadFrequently: true});
+
     console.log({xSize});
     console.log({ySize});
 
     context.drawImage(videoElement, 0, 0, xSize, ySize);
-
-    /*/Starts the brightness increase
-    console.time('Get ImageData');
-    const imageData = context.getImageData(0, 0, xSize, ySize);
-    const data = imageData.data;
-    console.timeEnd('Get ImageData');
-
-    console.time('Modify ImageData');
-    for (let i = 0; i < data.length; i += 4) {
-      data[i] = Math.min(data[i] + 30, 255);     // R
-      data[i + 1] = Math.min(data[i + 1] + 30, 255); // G
-      data[i + 2] = Math.min(data[i + 2] + 30, 255); // B
-    }
-    console.timeEnd('Modify ImageData');
-
-    console.time('Put ImageData');
-    context.putImageData(imageData, 0, 0);
-    console.timeEnd('Put ImageData');
-    //Ends the brightness increase*/
 
 
     drawSimpleBoundingBox(context, 0, 0, 130, 130, 15, [0, 0, 0]); //Leaves 100^2 box for readings, corner 15, 15
@@ -102,12 +183,33 @@ measurementBtn.addEventListener('click', async () => {
     //drawElaborateBoundingBox(context, 0, 0, 200, 130, [0, 128, 255]);
 
     canvas.style.display='block';
+  }else{
+    alert("Open the camera first");
   }
   console.timeEnd('Total time');
 });
 
+function drawPreviousMarkers(ctx){
+  for(let i=0; i<allEtiquetes.length; i++){
+    drawSimpleBoundingBox(ctx, ...allEtiquetes[i]); //Leaves 100^2 box for readings, corner 15, 15  
+    ctx.font = "bold 50px Arial";
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'top';
+    ctx.fillStyle = `rgb(${255-allEtiquetes[i][5][0]}, ${255-allEtiquetes[i][5][1]}, ${255-allEtiquetes[i][5][2]})`;
+    ctx.fillText(i+1, allEtiquetes[i][0]+50, allEtiquetes[i][1]+40);
+  }
+  //drawSimpleBoundingBox(ctx, 40, 20, 130, 130, 15, [0, 0, 0]);
+
+
+  if(newColorisActive){
+    drawSimpleBoundingBox(ctx, Number(xRange.value),Number(yRange.value), 130, 130, 15, [Number(rValue.value), Number(gValue.value), Number(bValue.value)]);
+    //console.log([Number(rValue.value), Number(gValue.value), Number(bValue.value)]);
+    
+  }
+}
+
 function drawResultingColor(ctx, x, y, w, h, color){
-  ctx.fillStyle = color;
+  ctx.fillStyle = `rgb(${color[0]}, ${color[1]}, ${color[2]})`;
   ctx.fillRect(x, y, w, h);
 }
 
@@ -148,14 +250,15 @@ function readZone(ctx, x, y, w, h){
       newColor[j]+=pixels[i][j]; // 'pixels' used to be alteredColorSpace
     }
   }
-  newColor = newColor.map(x => x/pixels.length); // 'pixels' used to be alteredColorSpace
+  newColor = newColor.map(x => Math.round(x/pixels.length)); // 'pixels' used to be alteredColorSpace
   console.log(newColor);
   /*nowRGB = convertToRGB(newColor, cSpace.value);
   console.log(nowRGB);
   */
   document.getElementById("colorR").innerText = 
-  `Color readed: rgb(${Math.round(newColor[0])}, ${Math.round(newColor[1])}, ${Math.round(newColor[2])})`;
-  return `rgb(${newColor[0]}, ${newColor[1]}, ${newColor[2]})`;
+  `Color readed: rgb(${Math.round(newColor[0])}, ${Math.round(newColor[1])}, ${Math.round(newColor[2])})
+   on x:${x}, y:${y}`;
+  return newColor;
   
 }
 
