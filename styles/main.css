@@ -26,7 +26,7 @@ body {
     display: flex;
     flex-direction: column;
     /* gap: 0px; */
-    font-size: 2.5vmin;
+    font-size: 3.5vmin;
 }
 #topControls{
     position: absolute; /* Position buttons at the bottom */
@@ -35,7 +35,7 @@ body {
     display: flex;
     flex-direction: column;
     /* gap: 0px; */
-    font-size: 2.5vmin;
+    font-size: 3.5vmin;
 }
 #otherControls{
     position: absolute; /* Position buttons at the bottom */
@@ -44,8 +44,17 @@ body {
     display: flex;
     flex-direction: column;
     gap: -65px;
-    font-size: 2.5vmin;
+    font-size: 3.5vmin;
     display: none;
+}
+#otherControls input[type="range"]{
+    width: 19vmin;
+}
+#otherControls input[type="number"]{
+    /*width: calc(15vmin);
+    height: calc(5vmin);
+    transform: scale(1); /* Adjust scale if needed */
+    font-size: inherit;  /* This will make the font size of input fields match the surrounding text */
 }
 #otherControls>p{
     gap: 0px;
@@ -65,9 +74,13 @@ select{
 #camera-stream, img, #canvas {
     /*transform: scale(0.2); /* Reduce video display size by 5 times */
     width: auto; /* Scale video to fit container */
-    height: 35vmin;
+    height: 40vmin;
     /* Warning... long devices are a thing */
     margin: 5px;
+}
+#camera-stream{
+    position: absolute;
+
 }
 /* The new image is slightly above the live view... so place the new measurement elsewhere  */
 #histogram{

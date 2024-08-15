@@ -159,6 +159,8 @@ calibrateCameraBtn.addEventListener('click', async ()=>{
     measurementBtn.style.display = "none";
     isCalibrating = true;
 
+    videoElement.style.visibility="hidden"
+
     
   }else if(isCalibrating){
     isCalibrating = false;
@@ -174,6 +176,8 @@ calibrateCameraBtn.addEventListener('click', async ()=>{
     toggleCameraBtn.style.display = "initial";
     calibrateCameraBtn.innerText = "Calibrate Sensor";
     measurementBtn.style.display = "initial";
+
+    videoElement.style.visibility = "visible";
   }else{
     alert("Open the camera first");
   }
@@ -199,11 +203,26 @@ measurementBtn.addEventListener('click', async () => {
     let theColor = readZone(context, xSize/2-130/2+15, ySize/2-130/2+15, 100, 100);
     drawResultingColor(context, xSize/2-130/2+15, ySize/2-130/2+15, 100, 100, theColor);
 
-    document.getElementById("colorR").innerText = 
+    /*document.getElementById("colorR").innerText = 
   `Color readed: rgb(${theColor[0]}, ${theColor[1]}, ${theColor[2]})
-   close to corner x:${xSize/2-130/2+15}, y:${ySize/2-130/2+15}`;
+   close to corner x:${xSize/2-130/2+15}, y:${ySize/2-130/2+15}`;*/
 
     canvas.style.display='block';
+    videoElement.style.visibility="hidden";
+    document.getElementById("controls").style.visibility = "hidden";
+
+    setTimeout(()=>{
+      alert(`Color readed: rgb(${theColor[0]}, ${theColor[1]}, ${theColor[2]})
+      close to corner x:${xSize/2-130/2+15}, y:${ySize/2-130/2+15}`);
+
+      //document.getElementById("controls").style.visibility = "visible";
+      canvas.style.display='none';
+      videoElement.style.visibility="visible";
+      document.getElementById("controls").style.visibility = "visible";
+
+    }, 1);
+     
+
   }else{
     alert("Open the camera first");
   }
