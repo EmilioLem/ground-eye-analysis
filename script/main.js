@@ -41,6 +41,9 @@ const bValue = document.getElementById("bValue");
 let storedArray = localStorage.getItem("myArray");
 let allEtiquetes = storedArray? JSON.parse(storedArray) : [];
 
+let samplesArray = localStorage.getItem("samplesArray");
+let allSamples = samplesArray? JSON.parse(samplesArray) : [];
+
 let myChart = null;
 
 function predictColor(){
@@ -222,6 +225,10 @@ measurementBtn.addEventListener('click', async () => {
 
     }, 1);
      
+    samplesArray.push([34, 52]);
+    localStorage.setItem("samplesArray", );
+let allSamples = samplesArray? JSON.parse(samplesArray) : [];
+/////THis is WRONG, FIX IT
 
   }else{
     alert("Open the camera first");
@@ -476,3 +483,39 @@ function drawSimpleBoundingBox(ctx, x, y, width, height, lineWidth, color) {
   // Right bar
   drawDecoratedRect(ctx, x + width - lineWidth, y, lineWidth, height, color);
 }
+
+// Function to convert the array to CSV format
+function convertArrayToCSV(array) {
+  const headers = ["Sample Number", "R Channel", "G Channel", "B Channel", "Small Note", "Date", "Hour"];
+  const csvContent = [
+      headers.join(','), // Add headers
+      ...array.map(row => row.join(',')) // Add rows
+  ].join('\n');
+  return csvContent;
+}
+
+// Function to download the CSV file
+function downloadCSV(csvContent, filename = 'samples.csv') {
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  const link = document.createElement("a");
+  const url = URL.createObjectURL(blob);
+  link.setAttribute("href", url);
+  link.setAttribute("download", filename);
+  link.style.display = "none";
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+// Sample data array (Replace this with your actual data)
+const samples = [
+  [1, 255, 0, 0, "Red color", "2024-08-14", "10:00 AM"],
+  [2, 0, 255, 0, "Green color", "2024-08-14", "11:00 AM"],
+  [3, 0, 0, 255, "Blue color", "2024-08-14", "12:00 PM"]
+];
+
+// Add an event listener to the button
+document.getElementById("downloadCsvBtn").addEventListener("click", function() {
+  const csvContent = convertArrayToCSV(samples);
+  downloadCSV(csvContent);
+});
