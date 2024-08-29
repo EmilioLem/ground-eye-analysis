@@ -241,21 +241,22 @@ measurementBtn.addEventListener('click', async () => {
     canvas.style.display='block';
     videoElement.style.visibility="hidden";
     document.getElementById("controls").style.visibility = "hidden";
-
+    
     setTimeout(()=>{
       alert(`Color readed: rgb(${theColor[0]}, ${theColor[1]}, ${theColor[2]})
-      corrected to: rgb(${correctedR}, ${correctedG}, ${correctedB})`);
+        corrected to: rgb(${correctedR}, ${correctedG}, ${correctedB})`);
+        
+        var date = new Date();
+        var laNota = prompt("Nota:");
+        allSamples.push([allSamples.length+1, ...theColor, correctedR,correctedG, correctedB, laNota.replace(/[;,]/g, ' '), date.toLocaleString()]);
+        localStorage.setItem("samplesArray", JSON.stringify(allSamples));
 
-      //document.getElementById("controls").style.visibility = "visible";
-      canvas.style.display='none';
-      videoElement.style.visibility="visible";
-      document.getElementById("controls").style.visibility = "visible";
-
-    }, 1);
-     
-    allSamples.push([theColor, [correctedR,correctedG,correctedB]]);
-    localStorage.setItem("samplesArray", JSON.stringify(allSamples));
-    //let allSamples = samplesArray? JSON.parse(samplesArray) : [];
+        //document.getElementById("controls").style.visibility = "visible";
+        canvas.style.display='none';
+        videoElement.style.visibility="visible";
+        document.getElementById("controls").style.visibility = "visible";
+      }, 1);
+      
 
   }else{
     alert("Open the camera first");
@@ -331,10 +332,6 @@ function drawPreviousMarkers(ctx){
     //console.log([Number(rValue.value), Number(gValue.value), Number(bValue.value)]);
     
   }
-}
-
-function getAllMarkersDeviation(ctx){
-  //
 }
 
 function drawResultingColor(ctx, x, y, w, h, color){
@@ -563,9 +560,14 @@ function drawSimpleBoundingBox(ctx, x, y, width, height, lineWidth, color) {
   drawDecoratedRect(ctx, x + width - lineWidth, y, lineWidth, height, color);
 }
 
+const samples = [
+  [1, 255, 0, 0, "Red color", "2024-08-14", "10:00 AM"],
+  [2, 0, 255, 0, "Green color", "2024-08-14", "11:00 AM"],
+  [3, 0, 0, 255, "Blue color", "2024-08-14", "12:00 PM"]
+];
 // Function to convert the array to CSV format
 function convertArrayToCSV(array) {
-  const headers = ["Sample Number", "R Channel", "G Channel", "B Channel", "Small Note", "Date", "Hour"];
+  const headers = ["No. de muestra", "canal R", "canal G", "canal B", "R-real", "G-real", "B-real", "Nota", "fecha", "hora"];
   const csvContent = [
       headers.join(','), // Add headers
       ...array.map(row => row.join(',')) // Add rows
@@ -587,14 +589,9 @@ function downloadCSV(csvContent, filename = 'samples.csv') {
 }
 
 // Sample data array (Replace this with your actual data)
-const samples = [
-  [1, 255, 0, 0, "Red color", "2024-08-14", "10:00 AM"],
-  [2, 0, 255, 0, "Green color", "2024-08-14", "11:00 AM"],
-  [3, 0, 0, 255, "Blue color", "2024-08-14", "12:00 PM"]
-];
 
 // Add an event listener to the button
 document.getElementById("downloadCsvBtn").addEventListener("click", function() {
-  const csvContent = convertArrayToCSV(samples);
+  const csvContent = convertArrayToCSV(allSamples);
   downloadCSV(csvContent);
 });
