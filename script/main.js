@@ -60,15 +60,16 @@ removeMarker.addEventListener('click', ()=>{
   let res = Number(prompt("Which box do you want to delete?"));
   
   if(!res && res!=0){
-    //console.log(res);
     alert("You did not entered a valid number");  
+    return;
   }
   else if(res>allEtiquetes.length || res<1){
-    //console.log(res);
     alert("Out of boundaries");
+    return;
   }
   else if(res != Math.round(res)){
     alert("That's not an integer!!!");
+    return;
   }
   console.log(res);
 
@@ -204,19 +205,46 @@ measurementBtn.addEventListener('click', async () => {
     drawPreviousMarkers(context);
 
     let theColor = readZone(context, xSize/2-130/2+15, ySize/2-130/2+15, 100, 100);
-    drawResultingColor(context, xSize/2-130/2+15, ySize/2-130/2+15, 100, 100, theColor);
+    drawResultingColor(context, xSize/2-130/2+15, ySize/2-130/2+15, 50, 100, theColor);
 
-    /*document.getElementById("colorR").innerText = 
-  `Color readed: rgb(${theColor[0]}, ${theColor[1]}, ${theColor[2]})
-   close to corner x:${xSize/2-130/2+15}, y:${ySize/2-130/2+15}`;*/
-
+    var correctedR = theColor[0];
+    var correctedG = theColor[1];
+    var correctedB = theColor[2];
+    
+    console.log(correctedR);
+    /////////// Starts correction
+    if(allEtiquetes.length > 1){
+      console.log('getting into the conditional');
+      console.log(allEtiquetes);
+      
+      
+      
+      calData = getCalibrationData(context);
+      
+      const R_coeffs = linearRegression(calData.R_msr, calData.R_cali);
+      const G_coeffs = linearRegression(calData.G_msr, calData.G_cali);
+      const B_coeffs = linearRegression(calData.B_msr, calData.B_cali);
+      
+      console.log(R_coeffs);
+      console.log(G_coeffs);
+      console.log(B_coeffs);
+      
+      correctedR = Math.round(applyLinearCorrection(R_coeffs.a, R_coeffs.b, theColor[0]));
+      correctedG = Math.round(applyLinearCorrection(G_coeffs.a, G_coeffs.b, theColor[1]));
+      correctedB = Math.round(applyLinearCorrection(B_coeffs.a, B_coeffs.b, theColor[2]));
+      
+      drawResultingColor(context, xSize/2-130/2+15+50, ySize/2-130/2+15, 50, 100, [correctedR,correctedG,correctedB]);
+    }
+    ///////////////////Ends correction
+    
+    
     canvas.style.display='block';
     videoElement.style.visibility="hidden";
     document.getElementById("controls").style.visibility = "hidden";
 
     setTimeout(()=>{
       alert(`Color readed: rgb(${theColor[0]}, ${theColor[1]}, ${theColor[2]})
-      close to corner x:${xSize/2-130/2+15}, y:${ySize/2-130/2+15}`);
+      corrected to: rgb(${correctedR}, ${correctedG}, ${correctedB})`);
 
       //document.getElementById("controls").style.visibility = "visible";
       canvas.style.display='none';
@@ -225,16 +253,66 @@ measurementBtn.addEventListener('click', async () => {
 
     }, 1);
      
-    samplesArray.push([34, 52]);
-    localStorage.setItem("samplesArray", );
-let allSamples = samplesArray? JSON.parse(samplesArray) : [];
-/////THis is WRONG, FIX IT
+    allSamples.push([theColor, [correctedR,correctedG,correctedB]]);
+    localStorage.setItem("samplesArray", JSON.stringify(allSamples));
+    //let allSamples = samplesArray? JSON.parse(samplesArray) : [];
 
   }else{
     alert("Open the camera first");
   }
   console.timeEnd('Total time');
 });
+
+function linearRegression(x, y) {
+  const n = x.length;
+
+  const sumX = x.reduce((sum, xi) => sum + xi, 0);
+  const sumY = y.reduce((sum, yi) => sum + yi, 0);
+  const sumXY = x.reduce((sum, xi, i) => sum + xi * y[i], 0);
+  const sumX2 = x.reduce((sum, xi) => sum + xi * xi, 0);
+
+  // Calculate slope (a) and intercept (b)
+  const a = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
+  const b = (sumY - a * sumX) / n;
+
+  return { a, b };
+}
+
+// Function to apply linear correction
+function applyLinearCorrection(a, b, input) {
+  return a * input + b;
+}
+
+function getCalibrationData(context){
+  const R_cali = [];
+  const G_cali = [];
+  const B_cali = [];
+
+  const R_msr = [];
+  const G_msr = [];
+  const B_msr = [];
+
+  for(let i=0; i<allEtiquetes.length; i++){
+    //drawSimpleBoundingBox(ctx, ...allEtiquetes[i]); //Leaves 100^2 box for readings, corner 15, 15  
+    R_cali.push(allEtiquetes[i][5][0]);
+    G_cali.push(allEtiquetes[i][5][1]);
+    B_cali.push(allEtiquetes[i][5][2]);
+    
+    readedColor = readZone(context, allEtiquetes[i][0]+15, allEtiquetes[i][1]+15, 100, 100);
+
+    R_msr.push(readedColor[0]);
+    G_msr.push(readedColor[1]);
+    B_msr.push(readedColor[2]);
+  }
+  return {
+    R_cali,
+    G_cali,
+    B_cali,
+    R_msr,
+    G_msr,
+    B_msr
+  };
+}
 
 function drawPreviousMarkers(ctx){
   for(let i=0; i<allEtiquetes.length; i++){
@@ -253,6 +331,10 @@ function drawPreviousMarkers(ctx){
     //console.log([Number(rValue.value), Number(gValue.value), Number(bValue.value)]);
     
   }
+}
+
+function getAllMarkersDeviation(ctx){
+  //
 }
 
 function drawResultingColor(ctx, x, y, w, h, color){
@@ -307,9 +389,6 @@ function readZone(ctx, x, y, w, h){
   
 }
 
-function average(thePixels){
-  return color;
-}
 //The function should be called manually for each color test... maybe already storing 
 //desired-vs-readed color per channel, on a friendly matrix (to build the lookup table/function)
 //Finally... call the same function, and pass it trough the builded lookup artifact.
