@@ -594,6 +594,7 @@ document.getElementById("deleteData").addEventListener("click", ()=>{
   if(confirm("¿Desea eliminar todos los registros?")){
     if(confirm("Está a punto de eliminar todos los registros")){
       allSamples = [];
+      localStorage.setItem("samplesArray", JSON.stringify(allSamples));
     }
   }
 })
