@@ -89,6 +89,32 @@ select{
     height: 200px;
 }
 
+#downloadCsvBtn{
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #681f87;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 3vmin;
+    opacity: 0.5;
+}
+#deleteData{
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #100f12ed;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 3vmin;
+    opacity: 0.5;
+}
+#extraBtnS{
+    margin-bottom: 13px;
+}
+
 #toggle-camera-btn {
     padding: 10px 20px;
     background-color: #3498db;
