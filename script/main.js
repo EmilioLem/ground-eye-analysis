@@ -57,18 +57,18 @@ xRange.addEventListener('input', predictColor);
 yRange.addEventListener('input', predictColor);
 
 removeMarker.addEventListener('click', ()=>{
-  let res = Number(prompt("Which box do you want to delete?"));
+  let res = Number(prompt("¿Qué marcador desea borrar?"));
   
   if(!res && res!=0){
-    alert("You did not entered a valid number");  
+    alert("No es un número válido");  
     return;
   }
   else if(res>allEtiquetes.length || res<1){
-    alert("Out of boundaries");
+    alert("Fuera de rango");
     return;
   }
   else if(res != Math.round(res)){
-    alert("That's not an integer!!!");
+    alert("Debe ser número entero!!!");
     return;
   }
   console.log(res);
@@ -80,7 +80,7 @@ removeMarker.addEventListener('click', ()=>{
 
 addMarker.addEventListener('click', ()=>{
   if(!isAddingNewBox){
-    addMarker.innerText = "Click to save";
+    addMarker.innerText = "Guardar marcador";
     removeMarker.style.display = "none";
     otherControls.style.display = "block"; //And reset the values
     xRange.value = 540;
@@ -98,7 +98,7 @@ addMarker.addEventListener('click', ()=>{
     localStorage.setItem("myArray", JSON.stringify(allEtiquetes));
 
     newColorisActive = false;
-    addMarker.innerText = "AddMarker";
+    addMarker.innerText = "Nuevo marcador";
     isAddingNewBox = false;
     removeMarker.style.display = "block";
     otherControls.style.display = "none";
@@ -115,7 +115,7 @@ toggleCameraBtn.addEventListener('click', async () => {
     videoElement.style.display = 'none';
     mediaStream.getTracks().forEach(track => track.stop()); // Stop media tracks
     isCameraOn = false;
-    toggleCameraBtn.textContent = 'Open Camera';
+    toggleCameraBtn.textContent = 'Abrir cámara';
   } else {
     try {
       //Loving this: https://upload.wikimedia.org/wikipedia/commons/0/0c/Vector_Video_Standards8.svg
@@ -132,7 +132,7 @@ toggleCameraBtn.addEventListener('click', async () => {
       videoElement.srcObject = mediaStream;
       videoElement.style.display = 'block';
       isCameraOn = true;
-      toggleCameraBtn.textContent = 'Close Camera';
+      toggleCameraBtn.textContent = 'Cerrar cámara';
     } catch (error) {
       console.error('Error accessing camera:', error);
     }
@@ -153,13 +153,13 @@ calibrateCameraBtn.addEventListener('click', async ()=>{
 
     canvas.style.display='block';
     
-    addMarker.innerText = "AddMarker";
+    addMarker.innerText = "Nuevo marcador";
     addMarker.style.display = "block";
     removeMarker.style.display = "block";
     isAddingNewBox = false;
 
     toggleCameraBtn.style.display = "none";
-    calibrateCameraBtn.innerText = "Finish calibration";
+    calibrateCameraBtn.innerText = "Cerrar calibración";
     measurementBtn.style.display = "none";
     isCalibrating = true;
 
@@ -178,12 +178,12 @@ calibrateCameraBtn.addEventListener('click', async ()=>{
     clearInterval(intervalID);
 
     toggleCameraBtn.style.display = "initial";
-    calibrateCameraBtn.innerText = "Calibrate Sensor";
+    calibrateCameraBtn.innerText = "Calibrar sensor";
     measurementBtn.style.display = "initial";
 
     videoElement.style.visibility = "visible";
   }else{
-    alert("Open the camera first");
+    alert("Primero abra la cámara!");
   }
 });
 
@@ -243,8 +243,8 @@ measurementBtn.addEventListener('click', async () => {
     document.getElementById("controls").style.visibility = "hidden";
     
     setTimeout(()=>{
-      alert(`Color readed: rgb(${theColor[0]}, ${theColor[1]}, ${theColor[2]})
-        corrected to: rgb(${correctedR}, ${correctedG}, ${correctedB})`);
+      alert(`Color medido: rgb(${theColor[0]}, ${theColor[1]}, ${theColor[2]})
+        corregido a: rgb(${correctedR}, ${correctedG}, ${correctedB})`);
         
         var date = new Date();
         var laNota = prompt("Nota:");
@@ -259,7 +259,7 @@ measurementBtn.addEventListener('click', async () => {
       
 
   }else{
-    alert("Open the camera first");
+    alert("Primero abra la cámara!");
   }
   console.timeEnd('Total time');
 });
@@ -559,12 +559,6 @@ function drawSimpleBoundingBox(ctx, x, y, width, height, lineWidth, color) {
   // Right bar
   drawDecoratedRect(ctx, x + width - lineWidth, y, lineWidth, height, color);
 }
-
-const samples = [
-  [1, 255, 0, 0, "Red color", "2024-08-14", "10:00 AM"],
-  [2, 0, 255, 0, "Green color", "2024-08-14", "11:00 AM"],
-  [3, 0, 0, 255, "Blue color", "2024-08-14", "12:00 PM"]
-];
 // Function to convert the array to CSV format
 function convertArrayToCSV(array) {
   const headers = ["No. de muestra", "canal R", "canal G", "canal B", "R-real", "G-real", "B-real", "Nota", "fecha", "hora"];
@@ -576,7 +570,7 @@ function convertArrayToCSV(array) {
 }
 
 // Function to download the CSV file
-function downloadCSV(csvContent, filename = 'samples.csv') {
+function downloadCSV(csvContent, filename = 'muestras.csv') {
   const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
   const link = document.createElement("a");
   const url = URL.createObjectURL(blob);
@@ -595,3 +589,11 @@ document.getElementById("downloadCsvBtn").addEventListener("click", function() {
   const csvContent = convertArrayToCSV(allSamples);
   downloadCSV(csvContent);
 });
+
+document.getElementById("deleteData").addEventListener("click", ()=>{
+  if(confirm("¿Desea eliminar todos los registros?")){
+    if(confirm("Está a punto de eliminar todos los registros")){
+      allSamples = [];
+    }
+  }
+})
