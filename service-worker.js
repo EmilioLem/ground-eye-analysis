@@ -7,7 +7,8 @@ const urlsToCache = [
     './service-worker.js',
     './images/icon-192x192.png',
     './images/icon-512x512.png',
-    './images/favicon.ico'
+    './images/favicon.ico',
+    './moreResources/chroma-min.js'
 ];
 
 self.addEventListener('install', event => {
