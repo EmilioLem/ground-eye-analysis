@@ -1,0 +1,164 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    background: linear-gradient(snow, seashell);
+    background: linear-gradient(mintcream, moccasin);
+}
+
+
+#controls {
+    position: absolute; /* Position buttons at the bottom */
+    bottom: 20px; /* Adjust spacing from bottom */
+    right: 20px;  /* Adjust horizontal spacing from right */
+    display: flex;
+    flex-direction: column;
+    /* gap: 0px; */
+    font-size: 3.5vmin;
+}
+#topControls{
+    position: absolute; /* Position buttons at the bottom */
+    top: 10px; /* Adjust spacing from bottom */
+    right: 20px;  /* Adjust horizontal spacing from right */
+    display: flex;
+    flex-direction: column;
+    /* gap: 0px; */
+    font-size: 3.5vmin;
+}
+#otherControls{
+    position: absolute; /* Position buttons at the bottom */
+    bottom: 20px; /* Adjust spacing from bottom */
+    left: 20px;  /* Adjust horizontal spacing from right */
+    display: flex;
+    flex-direction: column;
+    gap: -65px;
+    font-size: 3.5vmin;
+    display: none;
+}
+#otherControls input[type="range"]{
+    width: 19vmin;
+}
+#otherControls input[type="number"]{
+    /*width: calc(15vmin);
+    height: calc(5vmin);
+    transform: scale(1); /* Adjust scale if needed */
+    font-size: inherit;  /* This will make the font size of input fields match the surrounding text */
+}
+#otherControls>p{
+    gap: 0px;
+    margin: 5px;
+}
+/* The number inputs should also be scaled up on vmin!!! */
+select{
+    font-size: inherit;
+}
+
+
+
+#camera-stream, #canvas {
+    display: none;
+}
+
+#camera-stream, img, #canvas {
+    /*transform: scale(0.2); /* Reduce video display size by 5 times */
+    width: auto; /* Scale video to fit container */
+    height: 40vmin;
+    /* Warning... long devices are a thing */
+    margin: 5px;
+}
+#camera-stream{
+    position: absolute;
+
+}
+/* The new image is slightly above the live view... so place the new measurement elsewhere  */
+#histogram{
+    display: block;
+    width: 300px;
+    height: 200px;
+}
+
+#downloadCsvBtn{
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #681f87;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 3.2vmin;
+    opacity: 0.5;
+}
+#deleteData{
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #100f12ed;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 3.2vmin;
+    opacity: 0.5;
+}
+#extraBtnS{
+    margin-bottom: 13px;
+}
+
+#toggle-camera-btn {
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 3.6vmin;
+}
+
+#calibrate-sensor-btn{
+    margin-top: 10px;
+    background-color: mediumseagreen;
+    opacity: 0.8;
+    padding: 10px 20px;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 3.2vmin;
+}
+
+#take-measurement-btn {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #9b59b6;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 3.2vmin;
+    opacity: 0.5; 
+}
+/* Now the top controls */
+#addMarker{
+    padding: 10px 20px;
+    background-color: tan;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 2.4vmin;
+    opacity: 0.9; 
+    display: none;
+}
+#removeMarker{
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: darkkhaki;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 2.4vmin;
+    opacity: 0.9; 
+    display: none;
+}

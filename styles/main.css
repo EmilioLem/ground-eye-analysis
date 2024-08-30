@@ -1,95 +1,120 @@
+/* General styling for all devices */
 body {
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start; /* Align items at the top */
     min-height: 100vh;
     margin: 0;
-    background: linear-gradient(snow, seashell);
     background: linear-gradient(mintcream, moccasin);
+    position: relative; /* Set position relative for absolute positioning of children */
 }
 
-/*#camera-container {
-    position: relative;  Needed for absolute positioning of controls */
-    /*width: 640px;  Set a desired width for the video container 
-    height: 360px; /* Set a desired height for the video container *
+/* Landscape orientation: Desktop or phone held horizontally */
+@media (orientation: landscape) {
+    #controls, #topControls, #otherControls {
+        font-size: 2.5vmin;
+    }
+    #downloadCsvBtn, #deleteData, #toggle-camera-btn, #calibrate-sensor-btn, #take-measurement-btn {
+        font-size: 2.6vmin;
+    }
+    #addMarker, #removeMarker {
+        font-size: 1.8vmin;
+    }
+    #otherControls input[type="range"], #otherControls input[type="number"] {
+        width: 20vmin;
+        height: 4vmin;
+    }
+    #camera-stream, #canvas {
+        width: 40vw;
+        height: auto;
+        max-height: 45vh;
+        top: 20vh; /* Position closer to the top */
+        transform: translateY(-5%); /* Adjust slightly closer upwards */
+    }
+}
 
-    width: 100%;
-    max-width: 80vw;/*720px;  Set a maximum width for larger screens *
-    height: auto;
-    aspect-ratio: 16 / 9; /* Maintain a 16:9 aspect ratio *
-}*/
+/* Portrait orientation: Desktop or phone held vertically */
+@media (orientation: portrait) {
+    #controls, #topControls, #otherControls {
+        font-size: 3.5vmin;
+    }
+    #downloadCsvBtn, #deleteData, #toggle-camera-btn, #calibrate-sensor-btn, #take-measurement-btn {
+        font-size: 3.2vmin;
+    }
+    #addMarker, #removeMarker {
+        font-size: 2.4vmin;
+    }
+    #otherControls input[type="range"], #otherControls input[type="number"] {
+        width: 30vmin;
+        height: 5vmin;
+    }
+    #camera-stream, #canvas {
+        width: 70vw;
+        height: auto;
+        max-height: 50vh;
+        top: 25vh; /* Position closer to the top */
+        transform: translateY(-10%); /* Push even more closer upwards for portrait */
+    }
+}
 
+/* General styling for all elements */
 #controls {
-    position: absolute; /* Position buttons at the bottom */
-    bottom: 20px; /* Adjust spacing from bottom */
-    right: 20px;  /* Adjust horizontal spacing from right */
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
     display: flex;
     flex-direction: column;
-    /* gap: 0px; */
-    font-size: 3.5vmin;
-}
-#topControls{
-    position: absolute; /* Position buttons at the bottom */
-    top: 10px; /* Adjust spacing from bottom */
-    right: 20px;  /* Adjust horizontal spacing from right */
-    display: flex;
-    flex-direction: column;
-    /* gap: 0px; */
-    font-size: 3.5vmin;
-}
-#otherControls{
-    position: absolute; /* Position buttons at the bottom */
-    bottom: 20px; /* Adjust spacing from bottom */
-    left: 20px;  /* Adjust horizontal spacing from right */
-    display: flex;
-    flex-direction: column;
-    gap: -65px;
-    font-size: 3.5vmin;
-    display: none;
-}
-#otherControls input[type="range"]{
-    width: 19vmin;
-}
-#otherControls input[type="number"]{
-    /*width: calc(15vmin);
-    height: calc(5vmin);
-    transform: scale(1); /* Adjust scale if needed */
-    font-size: inherit;  /* This will make the font size of input fields match the surrounding text */
-}
-#otherControls>p{
-    gap: 0px;
-    margin: 5px;
-}
-/* The number inputs should also be scaled up on vmin!!! */
-select{
     font-size: inherit;
 }
 
+#topControls {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    font-size: inherit;
+}
 
-
-#camera-stream, #canvas {
+#otherControls {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: -65px;
+    font-size: inherit;
     display: none;
 }
 
-#camera-stream, img, #canvas {
-    /*transform: scale(0.2); /* Reduce video display size by 5 times */
-    width: auto; /* Scale video to fit container */
-    height: 40vmin;
-    /* Warning... long devices are a thing */
+#otherControls input[type="range"], #otherControls input[type="number"] {
+    font-size: inherit;
+    margin: 5px 0;
+}
+
+#otherControls > p {
+    gap: 0;
     margin: 5px;
 }
-#camera-stream{
-    position: absolute;
 
+select {
+    font-size: inherit;
 }
-/* The new image is slightly above the live view... so place the new measurement elsewhere  */
-#histogram{
+
+#camera-stream, #canvas {
+    position: absolute;
+    left: 50%; /* Center horizontally */
+    transform: translateX(-50%); /* Center horizontally */
+    margin: 5px;
+}
+
+#histogram {
     display: block;
     width: 300px;
     height: 200px;
 }
 
-#downloadCsvBtn{
+#downloadCsvBtn {
     margin-top: 10px;
     padding: 10px 20px;
     background-color: #681f87;
@@ -97,10 +122,10 @@ select{
     border: none;
     border-radius: 15px;
     cursor: pointer;
-    font-size: 3.2vmin;
     opacity: 0.5;
 }
-#deleteData{
+
+#deleteData {
     margin-top: 10px;
     padding: 10px 20px;
     background-color: #100f12ed;
@@ -108,10 +133,10 @@ select{
     border: none;
     border-radius: 15px;
     cursor: pointer;
-    font-size: 3.2vmin;
     opacity: 0.5;
 }
-#extraBtnS{
+
+#extraBtnS {
     margin-bottom: 13px;
 }
 
@@ -122,10 +147,9 @@ select{
     border: none;
     border-radius: 15px;
     cursor: pointer;
-    font-size: 3.6vmin;
 }
 
-#calibrate-sensor-btn{
+#calibrate-sensor-btn {
     margin-top: 10px;
     background-color: mediumseagreen;
     opacity: 0.8;
@@ -134,7 +158,6 @@ select{
     border: none;
     border-radius: 15px;
     cursor: pointer;
-    font-size: 3.2vmin;
 }
 
 #take-measurement-btn {
@@ -145,22 +168,21 @@ select{
     border: none;
     border-radius: 15px;
     cursor: pointer;
-    font-size: 3.2vmin;
-    opacity: 0.5; 
+    opacity: 0.5;
 }
-/* Now the top controls */
-#addMarker{
+
+#addMarker {
     padding: 10px 20px;
     background-color: tan;
     color: white;
     border: none;
     border-radius: 15px;
     cursor: pointer;
-    font-size: 2.4vmin;
-    opacity: 0.9; 
     display: none;
+    opacity: 0.9;
 }
-#removeMarker{
+
+#removeMarker {
     margin-top: 10px;
     padding: 10px 20px;
     background-color: darkkhaki;
@@ -168,7 +190,6 @@ select{
     border: none;
     border-radius: 15px;
     cursor: pointer;
-    font-size: 2.4vmin;
-    opacity: 0.9; 
     display: none;
+    opacity: 0.9;
 }
