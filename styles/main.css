@@ -6,7 +6,7 @@ body {
     min-height: 100vh;
     margin: 0;
     background: linear-gradient(mintcream, moccasin);
-    position: relative; /* Set position relative for absolute positioning of children */
+    position: relative; /* Set position relative for /*absolute positioning of fixed;children */*/
 }
 
 /* Landscape orientation: Desktop or phone held horizontally */
@@ -59,7 +59,7 @@ body {
 
 /* General styling for all elements */
 #controls {
-    position: absolute;
+    position: fixed;/*absolute;*/
     bottom: 20px;
     right: 20px;
     display: flex;
@@ -68,7 +68,7 @@ body {
 }
 
 #topControls {
-    position: absolute;
+    position: fixed;/*absolute;*/
     top: 10px;
     right: 20px;
     display: flex;
@@ -77,7 +77,7 @@ body {
 }
 
 #otherControls {
-    position: absolute;
+    position: fixed;/*absolute;*/
     bottom: 20px;
     left: 20px;
     display: flex;
@@ -102,7 +102,7 @@ select {
 }
 
 #camera-stream, #canvas {
-    position: absolute;
+    position: fixed;/*absolute;*/
     left: 50%; /* Center horizontally */
     transform: translateX(-50%); /* Center horizontally */
     margin: 5px;
