@@ -24,6 +24,9 @@ body {
         width: 20vmin;
         height: 4vmin;
     }
+    #otherControls{
+        font-size: 2vmin;
+    }
     #camera-stream, #canvas {
         width: 40vw;
         height: auto;
@@ -47,6 +50,9 @@ body {
     #otherControls input[type="range"], #otherControls input[type="number"] {
         width: 40vmin;
         height: 9vmin;
+    }
+    #otherControls{
+        font-size: 4vmin;
     }
     #camera-stream, #canvas {
         width: 70vw;
@@ -83,7 +89,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: -65px;
-    font-size: inherit;
+    /* font-size: inherit; */
     display: none;
 }
 
