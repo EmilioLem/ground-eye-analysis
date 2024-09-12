@@ -6,7 +6,7 @@ body {
     min-height: 100vh;
     margin: 0;
     background: linear-gradient(mintcream, moccasin);
-    position: relative; /* Set position relative for /*absolute positioning of fixed;children */*/
+    position: relative; /* Set position relative for /*absolute positioning of fixed;children */
 }
 
 /* Landscape orientation: Desktop or phone held horizontally */
@@ -36,17 +36,17 @@ body {
 /* Portrait orientation: Desktop or phone held vertically */
 @media (orientation: portrait) {
     #controls, #topControls, #otherControls {
-        font-size: 3.5vmin;
+        font-size: 4.5vmin;
     }
     #downloadCsvBtn, #deleteData, #toggle-camera-btn, #calibrate-sensor-btn, #take-measurement-btn {
-        font-size: 3.2vmin;
+        font-size: 4.2vmin;
     }
     #addMarker, #removeMarker {
-        font-size: 2.4vmin;
+        font-size: 4.4vmin;
     }
     #otherControls input[type="range"], #otherControls input[type="number"] {
-        width: 30vmin;
-        height: 5vmin;
+        width: 40vmin;
+        height: 9vmin;
     }
     #camera-stream, #canvas {
         width: 70vw;
