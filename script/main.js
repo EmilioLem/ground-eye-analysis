@@ -32,8 +32,8 @@ let isCalibrating = false;
 let isAddingNewBox = false;
 let intervalID;
 let newColorisActive = false;
-const xRange = document.getElementById("xRange");
-const yRange = document.getElementById("yRange");
+//const xRange = document.getElementById("xRange");
+//const yRange = document.getElementById("yRange");
 const rValue = document.getElementById("rValue");
 const gValue = document.getElementById("gValue");
 const bValue = document.getElementById("bValue");
@@ -45,18 +45,47 @@ let samplesArray = localStorage.getItem("samplesArray");
 let allSamples = samplesArray? JSON.parse(samplesArray) : [];
 
 let myChart = null;
+let xRangeValue = 0;
+let yRangeValue = 0;
 
-function predictColor(){
+/*function predictColor(){
   const context = canvas.getContext('2d', {willReadFrequently: true});
-  let theColor = readZone(context, Number(xRange.value)+15, Number(yRange.value)+15, 100, 100);
+
+  let theColor = readZone(context, Number(xRangeValue)+15, Number(yRangeValue)+15, 100, 100);
   rValue.value = theColor[0];
   gValue.value = theColor[1];
   bValue.value = theColor[2];
 }
 xRange.addEventListener('input', predictColor);
-yRange.addEventListener('input', predictColor);
+yRange.addEventListener('input', predictColor);*/
 
-removeMarker.addEventListener('click', ()=>{
+canvas.addEventListener('click', function(event) {
+  if(isAddingNewBox){
+
+    const rect = canvas.getBoundingClientRect();
+    
+    const scaleX = canvas.width / rect.width;    // scaleX factor
+    const scaleY = canvas.height / rect.height;  // scaleY factor
+    
+    const x = (event.clientX - rect.left) * scaleX;
+    const y = (event.clientY - rect.top) * scaleY;
+    
+    //console.log(`Logical X: ${Math.floor(x)}, Logical Y: ${Math.floor(y)}`);
+
+    const context = canvas.getContext('2d', {willReadFrequently: true});
+
+    xRangeValue = Math.floor(x) - 65;
+    yRangeValue = Math.floor(y) - 65;
+
+    let theColor = readZone(context, Number(xRangeValue)+15, Number(yRangeValue)+15, 100, 100);
+    //Sólo necesito guardar por ahí los valores, y guardarlos, ji ji ji, y resetar las variables con nueva cosa...
+    rValue.value = theColor[0];
+    gValue.value = theColor[1];
+    bValue.value = theColor[2];
+  }
+});
+
+removeMarker.addEventListener('click', ()=>{ //Borrando marcadores
   let res = Number(prompt("¿Qué marcador desea borrar?"));
   
   if(!res && res!=0){
@@ -78,13 +107,13 @@ removeMarker.addEventListener('click', ()=>{
   
 });
 
-addMarker.addEventListener('click', ()=>{
+addMarker.addEventListener('click', ()=>{ //Botón nuevo marcador
   if(!isAddingNewBox){
     addMarker.innerText = "Guardar marcador";
     removeMarker.style.display = "none";
     otherControls.style.display = "block"; //And reset the values
-    xRange.value = 540;
-    yRange.value = 540;
+    xRangeValue = 540;
+    yRangeValue = 540;
     rValue.value = 80;
     gValue.value = 160;
     bValue.value = 240;
@@ -93,7 +122,7 @@ addMarker.addEventListener('click', ()=>{
     isAddingNewBox = true;
   }else{ 
     //Saving logic goes here
-    allEtiquetes.push([Number(xRange.value), Number(yRange.value), 130, 130, 15, [Number(rValue.value), Number(gValue.value), Number(bValue.value)]]);
+    allEtiquetes.push([Number(xRangeValue), Number(yRangeValue), 130, 130, 15, [Number(rValue.value), Number(gValue.value), Number(bValue.value)]]);
                 //x, y, w, h, border, arrayWithColor
     localStorage.setItem("myArray", JSON.stringify(allEtiquetes));
 
@@ -108,7 +137,7 @@ addMarker.addEventListener('click', ()=>{
   }
 });
 
-toggleCameraBtn.addEventListener('click', async () => {
+toggleCameraBtn.addEventListener('click', async () => { //Botón toggle camera
   if (isCameraOn) {
     
     videoElement.srcObject = null; // Stop video source
@@ -328,7 +357,7 @@ function drawPreviousMarkers(ctx){
 
 
   if(newColorisActive){
-    drawSimpleBoundingBox(ctx, Number(xRange.value),Number(yRange.value), 130, 130, 15, [Number(rValue.value), Number(gValue.value), Number(bValue.value)]);
+    drawSimpleBoundingBox(ctx, Number(xRangeValue),Number(yRangeValue), 130, 130, 15, [Number(rValue.value), Number(gValue.value), Number(bValue.value)]);
     //console.log([Number(rValue.value), Number(gValue.value), Number(bValue.value)]);
     
   }
