@@ -11,25 +11,28 @@
 </head>
 <body>
 
-    <button onclick="toggleTable()">Toggle Table</button>
+    <!-- <button onclick="toggleTable()">Toggle Table</button> -->
     <button onclick="addNewData()">Add Random Data</button>
 
     <br>
     <br>
-    <div id="tableContainer" class="table-container">
+    <div class="table-container" id="tableContainer">
         <table>
-            <thead>
-                <tr>
-                    <th>Column 1</th>
-                    <th>Column 2</th>
-                    <th>Column 3</th>
-                </tr>
-            </thead>
-            <tbody id="tableBody">
-                <!-- Data will be inserted here -->
-            </tbody>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Column 1</th>
+              <th>Column 2</th>
+              <th>Column 3</th>
+            </tr>
+          </thead>
+          <tbody id="dataTable">
+            <!-- Data rows will be inserted here -->
+          </tbody>
         </table>
-    </div>
+      </div>
+
+    
     
     <video playsinline id="camera-stream" autoplay muted></video>
     <br>
@@ -85,7 +88,8 @@
     <!-- <script src="./moreResources/chart.js"></script> -->
     <!-- Remember to download and cache it!!!!! -->
     <script src="./moreResources/chroma-min.js"></script>
-    <script src="script/main.js"></script>
+    <script src="./script/main.js"></script>
+    <script src="./script/tableLogic.js"></script>
 </body>
 </html>
 
@@ -117,13 +121,24 @@
 
 Inicia segunda etapa, meses Septiembre-Diciembre  -->
 
-<!-- Noviembre 1
+<!-- 
+Noviembre 1
     + 0.5 planeando rediseño de GUI y lógica
+
+Noviembre 4
+    + 2.5 of creating table and arranging new buttons (crazy css struggle)
+
+Noviembre 5
+    + 1 of finally fixing table interaction (scrolling and clicking) with z-index (css)
+    + 2.5 of...
 -->
 
-<!-- Noviembre 4
-    + 2.5 of creating table and arranging new buttons (crazy css struggle)
+<!-- 
+
+    Todo:
+    - let header be static on table scrolling
  -->
+
 
 
 
