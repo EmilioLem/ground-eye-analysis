@@ -627,3 +627,58 @@ document.getElementById("deleteData").addEventListener("click", ()=>{
     }
   }
 })
+
+
+
+
+
+
+function toggleTable() {
+  const tableContainer = document.getElementById('tableContainer');
+  tableContainer.style.display = tableContainer.style.display === 'none' ? 'block' : 'none';
+}
+
+function getData() {
+  return JSON.parse(localStorage.getItem('data')) || [];
+}
+
+// Utility function to save data to localStorage
+function saveData(data) {
+  localStorage.setItem('data', JSON.stringify(data));
+}
+
+// Adds new random data to localStorage and updates the table
+function addNewData() {
+  const data = getData();
+  const newItem = {
+    col1: `Text ${Math.random().toFixed(2)}`, // Sample text data
+    col2: `Text ${Math.random().toFixed(2)}`,
+    col3: `Text ${Math.random().toFixed(2)}`
+  };
+  data.push(newItem);
+  saveData(data);
+  displayData(); // Update the table display
+}
+
+// Function to display data in the table
+function displayData() {
+  const tableBody = document.getElementById('tableBody');
+  const data = getData();
+  
+  // Clear existing table content
+  tableBody.innerHTML = '';
+  
+  // Add each data row to the table
+  data.forEach(item => {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+          <td>${item.col1}</td>
+          <td>${item.col2}</td>
+          <td>${item.col3}</td>
+      `;
+      tableBody.appendChild(row);
+  });
+}
+
+// Initial load of data when the page loads
+//window.onload = displayData;

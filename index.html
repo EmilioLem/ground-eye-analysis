@@ -10,12 +10,31 @@
     <link rel="manifest" href="./manifest.json">
 </head>
 <body>
+
+    <button onclick="toggleTable()">Toggle Table</button>
+    <button onclick="addNewData()">Add Random Data</button>
+
+    <br>
+    <br>
+    <div id="tableContainer" class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Column 1</th>
+                    <th>Column 2</th>
+                    <th>Column 3</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                <!-- Data will be inserted here -->
+            </tbody>
+        </table>
+    </div>
     
     <video playsinline id="camera-stream" autoplay muted></video>
     <br>
     <canvas id="canvas"></canvas>
     <br>
-    <!-- <canvas id="histogram" width="300" height="300"></canvas> -->    
     
     <div id="topControls">
         <button id="addMarker">Nuevo marcador</button>
@@ -100,8 +119,11 @@ Inicia segunda etapa, meses Septiembre-Diciembre  -->
 
 <!-- Noviembre 1
     + 0.5 planeando rediseño de GUI y lógica
-    
 -->
+
+<!-- Noviembre 4
+    + 2.5 of creating table and arranging new buttons (crazy css struggle)
+ -->
 
 
 

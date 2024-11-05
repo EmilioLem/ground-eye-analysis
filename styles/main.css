@@ -63,75 +63,122 @@ body {
     }
 }
 
-/* General styling for all elements */
-#controls {
+
+#camera-stream, #canvas {
     position: fixed;/*absolute;*/
-    bottom: 20px;
-    right: 20px;
-    display: flex;
-    flex-direction: column;
-    font-size: inherit;
+    left: 50%; /* Center horizontally ///*/
+    transform: translateX(-50%); /* Center horizontally //*/
+    margin: 5px;
 }
 
-#topControls {
-    position: fixed;/*absolute;*/
+
+#controls {
+    position: absolute;
+    bottom: 5%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: inherit;
+    /*display: flex;
+    flex-direction: column;*/
+}
+
+
+
+
+
+.table-container {
+    max-height: 60vh;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    margin: 20px 0;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #f4f4f4;
+    position: sticky;
+    top: 0;
+}
+
+tr:hover {
+    background-color: #f5f5f5;
+}
+
+/*.controls {
+    margin: 20px 0;
+}
+
+button {
+    padding: 8px 16px;
+    margin-right: 10px;
+    cursor: pointer;
+}*/
+
+
+
+
+
+/*#topControls {
+    position: fixed;/*absolute;///
     top: 10px;
     right: 20px;
     display: flex;
     flex-direction: column;
     font-size: inherit;
-}
+}*/
 
-#otherControls {
-    position: fixed;/*absolute;*/
+/*#otherControls {
+    position: fixed;/*absolute;///
     bottom: 20px;
     left: 20px;
     display: flex;
     flex-direction: column;
     gap: -65px;
-    /* font-size: inherit; */
+    /* font-size: inherit; ////
     display: none;
-}
+}*/
 
-#otherControls input[type="range"], #otherControls input[type="number"] {
+/*#otherControls input[type="range"], #otherControls input[type="number"] {
     font-size: inherit;
     margin: 5px 0;
-}
+}*/
 
-#otherControls > p {
+/*#otherControls > p {
     gap: 0;
     margin: 5px;
-}
+}*/
 
-select {
+/*select {
     font-size: inherit;
-}
+}*/
 
-#camera-stream, #canvas {
-    position: fixed;/*absolute;*/
-    left: 50%; /* Center horizontally */
-    transform: translateX(-50%); /* Center horizontally */
-    margin: 5px;
-}
 
-#histogram {
-    display: block;
-    width: 300px;
-    height: 200px;
-}
 
-#downloadCsvBtn {
+#someColors{
+    background-color: #681f87;
+
+}
+/*#downloadCsvBtn {
     margin-top: 10px;
     padding: 10px 20px;
-    background-color: #681f87;
     color: white;
     border: none;
     border-radius: 15px;
     cursor: pointer;
     opacity: 0.5;
-}
+}*/
 
-#deleteData {
+/*#deleteData {
     margin-top: 10px;
     padding: 10px 20px;
     background-color: #100f12ed;
@@ -140,11 +187,11 @@ select {
     border-radius: 15px;
     cursor: pointer;
     opacity: 0.5;
-}
+}*/
 
-#extraBtnS {
+/*#extraBtnS {
     margin-bottom: 13px;
-}
+}*/
 
 #toggle-camera-btn {
     padding: 10px 20px;
@@ -155,7 +202,7 @@ select {
     cursor: pointer;
 }
 
-#calibrate-sensor-btn {
+/*#calibrate-sensor-btn {
     margin-top: 10px;
     background-color: mediumseagreen;
     opacity: 0.8;
@@ -164,9 +211,9 @@ select {
     border: none;
     border-radius: 15px;
     cursor: pointer;
-}
+}*/
 
-#take-measurement-btn {
+/*#take-measurement-btn {
     margin-top: 10px;
     padding: 10px 20px;
     background-color: #9b59b6;
@@ -175,9 +222,9 @@ select {
     border-radius: 15px;
     cursor: pointer;
     opacity: 0.5;
-}
+}*/
 
-#addMarker {
+/*#addMarker {
     padding: 10px 20px;
     background-color: tan;
     color: white;
@@ -186,9 +233,9 @@ select {
     cursor: pointer;
     display: none;
     opacity: 0.9;
-}
+}*/
 
-#removeMarker {
+/*#removeMarker {
     margin-top: 10px;
     padding: 10px 20px;
     background-color: darkkhaki;
@@ -198,4 +245,4 @@ select {
     cursor: pointer;
     display: none;
     opacity: 0.9;
-}
+}*/
