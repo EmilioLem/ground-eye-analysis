@@ -145,6 +145,7 @@ toggleCameraBtn.addEventListener('click', async () => { //Botón toggle camera
     mediaStream.getTracks().forEach(track => track.stop()); // Stop media tracks
     isCameraOn = false;
     toggleCameraBtn.textContent = 'Abrir cámara';
+    toggleTable();
   } else {
     try {
       //Loving this: https://upload.wikimedia.org/wikipedia/commons/0/0c/Vector_Video_Standards8.svg
@@ -162,11 +163,11 @@ toggleCameraBtn.addEventListener('click', async () => { //Botón toggle camera
       videoElement.style.display = 'block';
       isCameraOn = true;
       toggleCameraBtn.textContent = 'Cerrar cámara';
+      toggleTable();
     } catch (error) {
       console.error('Error accessing camera:', error);
     }
   }
-  toggleTable();
 });
 
 calibrateCameraBtn.addEventListener('click', async ()=>{

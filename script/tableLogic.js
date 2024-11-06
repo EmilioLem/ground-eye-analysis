@@ -55,6 +55,13 @@ function getData() {
     tableContainer.style.display = tableContainer.style.display === 'none' ? 'block' : 'none';
     displayData();
   }
+
+  function deleteData(index) {
+    const data = getData();
+    data.splice(index, 1); // Remove the item by index
+    saveData(data);
+    displayData(); // Refresh the table
+  }
   
   // Initial load of data when the page loads
   displayData();
