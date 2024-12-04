@@ -66,3 +66,13 @@ Hopefully, each point (either reference or reading) can use a couple hundred pix
 
 * Now it's time to show it to the world (see their struggles)
     * Potentially add animations, sound... we will see. 
+
+
+## List 2.0
+
+* Translate everything
+* Bring back colorful background
+* Check styling on phone
+* Use complex color thing
+* Implement "live" markers.
+* 

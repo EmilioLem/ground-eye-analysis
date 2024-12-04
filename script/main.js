@@ -10,214 +10,163 @@ if ('serviceWorker' in navigator) {
     });
 }
 
+// Data Management
+let measurements = JSON.parse(localStorage.getItem('measurements')) || [];
 
-
-
-
-const videoElement = document.getElementById('camera-stream');
-
-const addMarker = document.getElementById("addMarker");
-const removeMarker = document.getElementById("removeMarker");
-const otherControls = document.getElementById("otherControls");
-
-const toggleCameraBtn = document.getElementById('toggle-camera-btn');
-const calibrateCameraBtn = document.getElementById('calibrate-sensor-btn');
-const measurementBtn = document.getElementById('take-measurement-btn');
-const canvas = document.getElementById("canvas");
-
-let mediaStream = null; // Store media stream reference
-let isCameraOn = false; // Boolean to track camera state
-let isCalibrating = false;
-
-let isAddingNewBox = false;
-let intervalID;
-let newColorisActive = false;
-//const xRange = document.getElementById("xRange");
-//const yRange = document.getElementById("yRange");
-const rValue = document.getElementById("rValue");
-const gValue = document.getElementById("gValue");
-const bValue = document.getElementById("bValue");
-
-let storedArray = localStorage.getItem("myArray");
-let allEtiquetes = storedArray? JSON.parse(storedArray) : [];
-
-let samplesArray = localStorage.getItem("samplesArray");
-let allSamples = samplesArray? JSON.parse(samplesArray) : [];
-
-let myChart = null;
-let xRangeValue = 0;
-let yRangeValue = 0;
-
-/*function predictColor(){
-  const context = canvas.getContext('2d', {willReadFrequently: true});
-
-  let theColor = readZone(context, Number(xRangeValue)+15, Number(yRangeValue)+15, 100, 100);
-  rValue.value = theColor[0];
-  gValue.value = theColor[1];
-  bValue.value = theColor[2];
+function saveMeasurements() {
+    localStorage.setItem('measurements', JSON.stringify(measurements));
+    updateTable();
 }
-xRange.addEventListener('input', predictColor);
-yRange.addEventListener('input', predictColor);*/
 
-canvas.addEventListener('click', function(event) {
-  if(isAddingNewBox){
-
-    const rect = canvas.getBoundingClientRect();
+function updateTable() {
+    const tbody = document.querySelector('#measurements-table tbody');
+    tbody.innerHTML = '';
     
-    const scaleX = canvas.width / rect.width;    // scaleX factor
-    const scaleY = canvas.height / rect.height;  // scaleY factor
-    
-    const x = (event.clientX - rect.left) * scaleX;
-    const y = (event.clientY - rect.top) * scaleY;
-    
-    //console.log(`Logical X: ${Math.floor(x)}, Logical Y: ${Math.floor(y)}`);
+    measurements.forEach((measurement, index) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${index + 1}</td>
+            <td>
+                <span class="color-preview" style="background-color: rgb(${measurement.rgb.join(',')})"></span>
+                RGB(${measurement.rgb.join(',')})
+            </td>
+            <td>${measurement.notes}</td>
+            <td>${measurement.timestamp}</td>
+            <td><span class="delete-icon" onclick="deleteMeasurement(${index})">🗑️</span></td>
+        `;
+        tbody.appendChild(row);
+    });
+}
 
-    const context = canvas.getContext('2d', {willReadFrequently: true});
-
-    xRangeValue = Math.floor(x) - 65;
-    yRangeValue = Math.floor(y) - 65;
-
-    let theColor = readZone(context, Number(xRangeValue)+15, Number(yRangeValue)+15, 100, 100);
-    //Sólo necesito guardar por ahí los valores, y guardarlos, ji ji ji, y resetar las variables con nueva cosa...
-    rValue.value = theColor[0];
-    gValue.value = theColor[1];
-    bValue.value = theColor[2];
-  }
-});
-
-removeMarker.addEventListener('click', ()=>{ //Borrando marcadores
-  let res = Number(prompt("¿Qué marcador desea borrar?"));
-  
-  if(!res && res!=0){
-    alert("No es un número válido");  
-    return;
-  }
-  else if(res>allEtiquetes.length || res<1){
-    alert("Fuera de rango");
-    return;
-  }
-  else if(res != Math.round(res)){
-    alert("Debe ser número entero!!!");
-    return;
-  }
-  console.log(res);
-
-  allEtiquetes.splice(res-1, 1);
-  localStorage.setItem("myArray", JSON.stringify(allEtiquetes));
-  
-});
-
-addMarker.addEventListener('click', ()=>{ //Botón nuevo marcador
-  if(!isAddingNewBox){
-    addMarker.innerText = "Guardar marcador";
-    removeMarker.style.display = "none";
-    otherControls.style.display = "block"; //And reset the values
-    xRangeValue = 540;
-    yRangeValue = 540;
-    rValue.value = 80;
-    gValue.value = 160;
-    bValue.value = 240;
-    
-    newColorisActive = true;
-    isAddingNewBox = true;
-  }else{ 
-    //Saving logic goes here
-    allEtiquetes.push([Number(xRangeValue), Number(yRangeValue), 130, 130, 15, [Number(rValue.value), Number(gValue.value), Number(bValue.value)]]);
-                //x, y, w, h, border, arrayWithColor
-    localStorage.setItem("myArray", JSON.stringify(allEtiquetes));
-
-    newColorisActive = false;
-    addMarker.innerText = "Nuevo marcador";
-    isAddingNewBox = false;
-    removeMarker.style.display = "block";
-    otherControls.style.display = "none";
-
-    const context = canvas.getContext('2d', {willReadFrequently: true});
-    
-  }
-});
-
-toggleCameraBtn.addEventListener('click', async () => { //Botón toggle camera
-  if (isCameraOn) {
-    
-    videoElement.srcObject = null; // Stop video source
-    videoElement.style.display = 'none';
-    mediaStream.getTracks().forEach(track => track.stop()); // Stop media tracks
-    isCameraOn = false;
-    toggleCameraBtn.textContent = 'Abrir cámara';
-    toggleTable();
-  } else {
-    try {
-      //Loving this: https://upload.wikimedia.org/wikipedia/commons/0/0c/Vector_Video_Standards8.svg
-      //Potentially scalable to SQFHD 1920*1920
-      const constraints = {
-        video: {
-          facingMode: "environment", //// Instagram square format
-          height: { idea: 1080}, //min: 1080, ideal: 1080, max: 1080 
-          width: { ideal: 1080}, //min: 1080, ideal: 1080, max: 1080 
-          aspectRatio: 1
-        }
-      };
-      mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
-      videoElement.srcObject = mediaStream;
-      videoElement.style.display = 'block';
-      isCameraOn = true;
-      toggleCameraBtn.textContent = 'Cerrar cámara';
-      toggleTable();
-    } catch (error) {
-      console.error('Error accessing camera:', error);
+function deleteMeasurement(index) {
+    if (confirm('Are you sure you want to delete this measurement?')) {
+        measurements.splice(index, 1);
+        saveMeasurements();
     }
-  }
-});
+}
 
-calibrateCameraBtn.addEventListener('click', async ()=>{
-  if(isCameraOn && videoElement.readyState >= 2 && !isCalibrating){
-    const xSize = canvas.width = videoElement.videoWidth;
-    const ySize = canvas.height = videoElement.videoHeight;
+function deleteAllData() {
+    if (confirm('Are you sure you want to delete all measurements?')) {
+        if (confirm('This action cannot be undone. Proceed?')) {
+            measurements = [];
+            saveMeasurements();
+        }
+    }
+}
 
-    const context = canvas.getContext('2d', {willReadFrequently: true});
+function exportData() {
+    const csv = [
+        ['ID', 'RGB', 'Notes', 'Timestamp'],
+        ...measurements.map((m, i) => [
+            i + 1,
+            `${m.rgb.join('-')}`,
+            m.notes,
+            m.timestamp
+        ])
+    ].map(row => row.join(',')).join('\n');
 
-    intervalID = setInterval(()=>{
-      context.drawImage(videoElement, 0, 0, xSize, ySize);
-      drawPreviousMarkers(context);
-    }, 100);
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'mediciones-color.csv';
+    a.click();
+    URL.revokeObjectURL(url);
+}
 
-    canvas.style.display='block';
+// Camera Management
+let stream = null;
+const video = document.getElementById('camera-feed');
+const canvas = document.getElementById('camera-canvas');
+const ctx = canvas.getContext('2d');
+
+async function startCamera() {
+    try {
+        stream = await navigator.mediaDevices.getUserMedia({
+            //Loving this: https://upload.wikimedia.org/wikipedia/commons/0/0c/Vector_Video_Standards8.svg
+            video: {
+                facingMode: 'environment',
+                width: { ideal: 1280 },//1080}, //min: 1080, ideal: 1080, max: 1080 
+                height: { ideal: 720 } //1080}, //min: 1080, ideal: 1080, max: 1080 
+            }
+        });
+        video.srcObject = stream;
+        video.style.display = 'block';
+        canvas.style.display = 'none';
+        
+        // Set canvas size once video metadata is loaded
+        video.onloadedmetadata = () => {
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+        };
+    } catch (err) {
+        console.error('Error accessing camera:', err);
+        alert('Could not access camera. Please ensure camera permissions are granted.');
+    }
+}
+
+function stopCamera() {
+    if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+        video.srcObject = null;
+        stream = null;
+    }
+    showSection('data-section');
+}
+
+function takeMeasurement() {
+    if (!stream) return;
+
+    // Draw current video frame to canvas
+    ctx.drawImage(video, 0, 0);
+
+    // Get center pixel color
+    const centerX = Math.floor(canvas.width / 2);
+    const centerY = Math.floor(canvas.height / 2);
+    const pixelData = ctx.getImageData(centerX, centerY, 1, 1).data;
     
-    addMarker.innerText = "Nuevo marcador";
-    addMarker.style.display = "block";
-    removeMarker.style.display = "block";
-    isAddingNewBox = false;
-
-    toggleCameraBtn.style.display = "none";
-    calibrateCameraBtn.innerText = "Cerrar calibración";
-    measurementBtn.style.display = "none";
-    isCalibrating = true;
-
-    videoElement.style.visibility="hidden"
-
+    const rgb = [pixelData[0], pixelData[1], pixelData[2]];
+    const notes = prompt('Add notes for this measurement:').replace(',', ' ') || '';
     
-  }else if(isCalibrating){
-    isCalibrating = false;
-    canvas.style.display='none';
+    var goodDate = new Date().toLocaleString();
+    goodDate = goodDate.replace(',',' -');
+    measurements.push({
+        rgb,
+        notes,
+        timestamp: goodDate
+    });
+    
+    saveMeasurements();
+    alert(`Color measured: RGB(${rgb.join(',')})`);
+}
 
-    addMarker.style.display = "none";
-    removeMarker.style.display = "none";
-    otherControls.style.display = "none";
-    isAddingNewBox = false;
-    newColorisActive = false;
-    clearInterval(intervalID);
+// Section Management
+function showSection(sectionId) {
+    document.querySelectorAll('.section').forEach(section => {
+        section.classList.remove('active');
+    });
+    document.getElementById(sectionId).classList.add('active');
+    
+    if (sectionId === 'camera-section') {
+        startCamera();
+    }
+}
 
-    toggleCameraBtn.style.display = "initial";
-    calibrateCameraBtn.innerText = "Calibrar sensor";
-    measurementBtn.style.display = "initial";
+// Initialize
+updateTable();
 
-    videoElement.style.visibility = "visible";
-  }else{
-    alert("Primero abra la cámara!");
-  }
-});
 
+
+
+
+
+
+
+
+
+
+
+/*
 measurementBtn.addEventListener('click', async () => {
   console.time('Total time');
   
@@ -266,6 +215,7 @@ measurementBtn.addEventListener('click', async () => {
       
       drawResultingColor(context, xSize/2-130/2+15+50, ySize/2-130/2+15, 50, 100, [correctedR,correctedG,correctedB]);
     }
+
     ///////////////////Ends correction
     
     
@@ -315,36 +265,7 @@ function applyLinearCorrection(a, b, input) {
   return a * input + b;
 }
 
-function getCalibrationData(context){
-  const R_cali = [];
-  const G_cali = [];
-  const B_cali = [];
 
-  const R_msr = [];
-  const G_msr = [];
-  const B_msr = [];
-
-  for(let i=0; i<allEtiquetes.length; i++){
-    //drawSimpleBoundingBox(ctx, ...allEtiquetes[i]); //Leaves 100^2 box for readings, corner 15, 15  
-    R_cali.push(allEtiquetes[i][5][0]);
-    G_cali.push(allEtiquetes[i][5][1]);
-    B_cali.push(allEtiquetes[i][5][2]);
-    
-    readedColor = readZone(context, allEtiquetes[i][0]+15, allEtiquetes[i][1]+15, 100, 100);
-
-    R_msr.push(readedColor[0]);
-    G_msr.push(readedColor[1]);
-    B_msr.push(readedColor[2]);
-  }
-  return {
-    R_cali,
-    G_cali,
-    B_cali,
-    R_msr,
-    G_msr,
-    B_msr
-  };
-}
 
 function drawPreviousMarkers(ctx){
   for(let i=0; i<allEtiquetes.length; i++){
@@ -377,28 +298,7 @@ function readZone(ctx, x, y, w, h){
   //The switch-aided color transformation function can be called here
   const pixels = imageDataToPixels(theData);
   
-  /*let alteredColorSpace = convertFromRGB(pixels, cSpace.value);
-  console.log(cSpace.value);
-  //console.log(alteredColorSpace);
-
-  let maxValues;
-  switch (cSpace.value) {
-    case 'RGB':
-        maxValues = [255, 255, 255];
-        break;
-    case 'HSL':
-    case 'HSV':
-        maxValues = [360, 1, 1];
-        break;
-    case 'CMYK':
-        maxValues = [1, 1, 1, 1];
-        break;
-    default:
-        throw new Error('Unsupported color space');
-  }
-
-  const histograms = generateHistogram(alteredColorSpace, maxValues);
-  plotHistogram(histograms);*/
+ 
 
   newColor = Array(3).fill(0); //'3' Used to be maxValues.length
   for(let i=0; i<pixels.length; i++){ // 'pixels' used to be alteredColorSpace
@@ -408,85 +308,15 @@ function readZone(ctx, x, y, w, h){
     }
   }
   newColor = newColor.map(x => Math.round(x/pixels.length)); // 'pixels' used to be alteredColorSpace
-  //console.log(newColor);
-  /*nowRGB = convertToRGB(newColor, cSpace.value);
-  console.log(nowRGB);
-  */
   
   return newColor;
   
 }
 
-//The function should be called manually for each color test... maybe already storing 
-//desired-vs-readed color per channel, on a friendly matrix (to build the lookup table/function)
-//Finally... call the same function, and pass it trough the builded lookup artifact.
 
-function normalizeValue(value, max) {
-  return Math.round(value * 255 / max);
-}
-
-function generateHistogram(pixels, maxValues) {
-  const numBins = 256;
-  const numChannels = maxValues.length;
-  const histograms = Array.from({ length: numChannels }, () => new Array(numBins).fill(0));
-
-  pixels.forEach(pixel => {
-      for (let i = 0; i < numChannels; i++) {
-          const normalizedValue = normalizeValue(pixel[i], maxValues[i]);
-          histograms[i][normalizedValue]++;
-      }
-  });
-
-  return histograms;
-}
-
-function plotHistogram(histograms) {
-  const labels = Array.from({ length: 256 }, (_, i) => i);
-  const data = {
-      labels: labels,
-      datasets: histograms.map((histogram, index) => ({
-          label: `Channel ${index + 1}`,
-          backgroundColor: `rgba(${255 - index * 60}, ${index * 60}, ${255 - index * 60}, 0.5)`,
-          borderColor: `rgba(${255 - index * 60}, ${index * 60}, ${255 - index * 60}, 1)`,
-          data: histogram,
-          fill: false,
-          borderWidth: 1
-      }))
-  };
-
-  const ctx = document.getElementById('histogram').getContext('2d');
-  if (myChart) {
-    myChart.destroy();
-  }
-  myChart = new Chart(ctx, {
-    type: 'line',
-    data: data,
-    options: {
-      responsive: false, //Crucial to set desired size!!!
-      //maintainAspectRatio: false, // Just remember this exists :)
-      scales: {
-                x: {
-                  title: {
-                    display: true,
-                    text: 'Value'
-                  }
-                },
-                y: {
-                    type: 'logarithmic',
-                    title: {
-                        display: true,
-                        text: 'Frequency (log)'
-                      }
-                    }
-              }
-              }
-  });
-}
-            
+       
 
 
-/// Phase 22222222222222222222222222222222222222
-////////////////////////////////
 function convertFromRGB(pixels, colorSpace) {
   //const chroma = require('chroma-js'); // Import chroma-js library
   switch (colorSpace) {
@@ -539,17 +369,8 @@ function imageDataToPixels(data) {
     pixels.push([r, g, b]);
   }
   return pixels;
-}
-
-/*function drawSimpleBoundingBox(ctx, x, y, width, height, lineWidth, color){
-  ctx.fillStyle=color;
-  
-  ctx.fillRect(x, y, width, lineWidth); //Top bar
-  ctx.fillRect(x, y+height-lineWidth, width, lineWidth); //Bottom bar
-  
-  ctx.fillRect(x, y, lineWidth, height); //Left bar
-  ctx.fillRect(x+width-lineWidth, y, lineWidth, height); //Right bar
 }*/
+
 
 function drawDecoratedRect(ctx, x, y, width, height, color) {
   // Calculate the inverse color
@@ -590,46 +411,6 @@ function drawSimpleBoundingBox(ctx, x, y, width, height, lineWidth, color) {
   // Right bar
   drawDecoratedRect(ctx, x + width - lineWidth, y, lineWidth, height, color);
 }
-// Function to convert the array to CSV format
-function convertArrayToCSV(array) {
-  const headers = ["No. de muestra", "canal R", "canal G", "canal B", "R-real", "G-real", "B-real", "Nota", "fecha", "hora"];
-  const csvContent = [
-      headers.join(','), // Add headers
-      ...array.map(row => row.join(',')) // Add rows
-  ].join('\n');
-  return csvContent;
-}
-
-// Function to download the CSV file
-function downloadCSV(csvContent, filename = 'muestras.csv') {
-  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-  const link = document.createElement("a");
-  const url = URL.createObjectURL(blob);
-  link.setAttribute("href", url);
-  link.setAttribute("download", filename);
-  link.style.display = "none";
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-}
-
-// Sample data array (Replace this with your actual data)
-
-// Add an event listener to the button
-document.getElementById("downloadCsvBtn").addEventListener("click", function() {
-  const csvContent = convertArrayToCSV(allSamples);
-  downloadCSV(csvContent);
-});
-
-document.getElementById("deleteData").addEventListener("click", ()=>{
-  if(confirm("¿Desea eliminar todos los registros?")){
-    if(confirm("Está a punto de eliminar todos los registros")){
-      allSamples = [];
-      localStorage.setItem("samplesArray", JSON.stringify(allSamples));
-    }
-  }
-})
-
 
 
 

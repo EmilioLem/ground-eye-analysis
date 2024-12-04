@@ -1,243 +1,140 @@
-/* General styling for all devices */
-body {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start; /* Align items at the top */
-    min-height: 100vh;
+* {
     margin: 0;
-    background: linear-gradient(mintcream, moccasin);
-    position: relative; /* Set position relative for /*absolute positioning of fixed;children */
+    padding: 0;
+    box-sizing: border-box;
 }
 
-/* Landscape orientation: Desktop or phone held horizontally  */
-@media (orientation: landscape) {
-    #controls, #topControls, #otherControls {
-        font-size: 2.5vmin;
-    }
-    #downloadCsvBtn, #deleteData, #toggle-camera-btn, #calibrate-sensor-btn, #take-measurement-btn {
-        font-size: 2.6vmin;
-    }
-    #addMarker, #removeMarker {
-        font-size: 1.8vmin;
-    }
-    #otherControls input[type="range"], #otherControls input[type="number"] {
-        width: 20vmin;
-        height: 4vmin;
-    }
-    #otherControls{
-        font-size: 2vmin;
-    }
-    #camera-stream, #canvas {
-        width: 40vw;
-        height: auto;
-        max-height: 45vh;
-        top: 20vh;
-        transform: translateY(-5%);
-    }
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to bottom right, #f0f0f0, #e0e0e0);
+    min-height: 100vh;
 }
 
-
-@media (orientation: portrait) {
-    #controls, #topControls, #otherControls {
-        font-size: 4.5vmin;
-    }
-    #downloadCsvBtn, #deleteData, #toggle-camera-btn, #calibrate-sensor-btn, #take-measurement-btn {
-        font-size: 4.2vmin;
-    }
-    #addMarker, #removeMarker {
-        font-size: 4.4vmin;
-    }
-    #otherControls input[type="range"], #otherControls input[type="number"] {
-        width: 40vmin;
-        height: 9vmin;
-    }
-    #otherControls{
-        font-size: 4vmin;
-    }
-    #camera-stream, #canvas {
-        width: 70vw;
-        height: auto;
-        max-height: 50vh;
-        top: 25vh;
-        transform: translateY(-10%);
-    }
+.section {
+    display: none;
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
-
-#camera-stream, #canvas {
-    z-index: 0;
-    position: fixed;/*absolute;*/
-    left: 50%; /* Center horizontally ///*/
-    transform: translateX(-50%); /* Center horizontally //*/
-    margin: 5px;
+.section.active {
+    display: block;
 }
 
-
-#controls {
-    position: absolute;
-    bottom: 5%;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: inherit;
-    /*display: flex;
-    flex-direction: column;*/
-}
-
-
-
-
+/* Table Section Styles */
 .table-container {
-  z-index: 1;
-  /*max-height: 60vh;        /* 60% of viewport height */
-  /*overflow-y: auto;        /* Enable vertical scrolling */
-  /*width: 100%;             /* Full width of the container */
-  width: 80vw;              /* 80% of the viewport width */
-  max-height: 60vh;         /* 60% of the viewport height */
-  overflow-y: auto;         /* Enable vertical scrolling */
-  margin: 0 auto;           /* Center horizontally */
-  position: relative;       /* To position it 15% from the top */
-  top: 15vh;    
-  
-  border: 1px solid #ddd;
-  box-sizing: border-box;  /* Ensures padding doesn’t affect width */
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+    max-height: 70vh;
+    overflow-y: auto;
 }
+
 table {
-  width: 100%;
-  border-collapse: collapse;
+    width: 100%;
+    border-collapse: collapse;
 }
+
 th, td {
-  padding: 8px;
-  text-align: left;
-  border-bottom: 1px solid #ddd;
-  cursor: pointer;         /* Make rows look clickable */
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
 }
+
 th {
-  background-color: #f2f2f2;
-}
-/* Sticky header styling */
-thead th {
-  position: sticky;       /* Makes the header stick to the top */
-  top: 0;                 /* Sticks to the top of the container */
-  background-color: #f2f2f2; /* Consistent background for header */
-  z-index: 1;             /* Ensures the header is above content */
+    background-color: #f8f8f8;
+    position: sticky;
+    top: 0;
 }
 
+.color-preview {
+    width: 24px;
+    height: 24px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 8px;
+}
 
-
-
-
-/* Cuestionableeeeee */
-#topControls {
-    position: fixed;
-    top: 10px;
-    right: 20px;
+.button-container {
     display: flex;
-    flex-direction: column;
-    font-size: inherit;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: white;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    color: white;
+}
+
+/* Camera Section Styles */
+.camera-section {
+    text-align: center;
+}
+
+.camera-container {
+    position: relative;
+    width: 100%;
+    max-width: 640px;
+    margin: 0 auto;
+}
+
+#camera-feed {
+    width: 100%;
     display: none;
 }
 
-/* Cuestionableeeeee */
-#otherControls {
-    position: fixed;
-    bottom: 20px;
-    left: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: -65px;
-    font-size: inherit; 
-    display: none;
-}
-#otherControls input[type="range"], #otherControls input[type="number"] {
-    font-size: inherit;
-    margin: 5px 0;
-}
-#otherControls > p {
-    gap: 0;
-    margin: 5px;
-}
-select {
-    font-size: inherit;
+#camera-canvas {
+    width: 100%;
+    background-color: #000;
 }
 
-
-
-#someColors{
-    background-color: #681f87;
-
-}
-/*#downloadCsvBtn {
-    margin-top: 10px;
-    padding: 10px 20px;
-    color: white;
-    border: none;
-    border-radius: 15px;
-    cursor: pointer;
-    opacity: 0.5;
-}*/
-
-/*#deleteData {
-    margin-top: 10px;
-    padding: 10px 20px;
-    background-color: #100f12ed;
-    color: white;
-    border: none;
-    border-radius: 15px;
-    cursor: pointer;
-    opacity: 0.5;
-}*/
-
-
-#toggle-camera-btn {
-    padding: 10px 20px;
-    background-color: #3498db;
-    color: white;
-    border: none;
-    border-radius: 15px;
-    cursor: pointer;
+.target-box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100px;
+    height: 100px;
+    border: 2px solid #fff;
+    pointer-events: none;
 }
 
-/*#calibrate-sensor-btn {
-    margin-top: 10px;
-    background-color: mediumseagreen;
-    opacity: 0.8;
-    padding: 10px 20px;
-    color: white;
-    border: none;
-    border-radius: 15px;
-    cursor: pointer;
-}*/
+/* About Section Styles */
+.about-section {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
 
-/*#take-measurement-btn {
-    margin-top: 10px;
-    padding: 10px 20px;
-    background-color: #9b59b6;
-    color: white;
-    border: none;
-    border-radius: 15px;
-    cursor: pointer;
-    opacity: 0.5;
-}*/
+.about-section h2 {
+    color: #333;
+    margin-bottom: 20px;
+}
 
-/*#addMarker {
-    padding: 10px 20px;
-    background-color: tan;
-    color: white;
-    border: none;
-    border-radius: 15px;
+.delete-icon {
     cursor: pointer;
-    display: none;
-    opacity: 0.9;
-}*/
-
-/*#removeMarker {
-    margin-top: 10px;
-    padding: 10px 20px;
-    background-color: darkkhaki;
-    color: white;
-    border: none;
-    border-radius: 15px;
-    cursor: pointer;
-    display: none;
-    opacity: 0.9;
-}*/
+    color: #dc3545;
+}
