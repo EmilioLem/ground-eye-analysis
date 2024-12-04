@@ -18,19 +18,19 @@
                     <tr>
                         <th>ID</th>
                         <th>Color</th>
-                        <th>Notes</th>
-                        <th>Date/Time</th>
-                        <th>Action</th>
+                        <th>Notas</th>
+                        <th>Fecha/Hora</th>
+                        <th>Borrar</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
             </table>
         </div>
         <div class="button-container">
-            <button class="btn-primary" onclick="exportData()">Export Data</button>
-            <button class="btn-danger" onclick="deleteAllData()">Delete All</button>
-            <button class="btn-primary" onclick="showSection('camera-section')">Open Camera</button>
-            <button class="btn-secondary" onclick="showSection('about-section')">About</button>
+            <button class="btn-primary" onclick="exportData()">Exportar tabla</button>
+            <button class="btn-danger" onclick="deleteAllData()">Borrar todo</button>
+            <button class="btn-primary" onclick="showSection('camera-section')">Abrir Cámara</button>
+            <button class="btn-secondary" onclick="showSection('about-section')">Info</button>
         </div>
     </section>
 
@@ -42,19 +42,32 @@
             <div class="target-box"></div>
         </div>
         <div class="button-container">
-            <button class="btn-secondary" onclick="stopCamera()">Turn Off Camera</button>
-            <button class="btn-primary" onclick="takeMeasurement()">Take Measurement</button>
+            <button class="btn-secondary" onclick="stopCamera()">Cerrar cámara</button>
+            <button class="btn-primary" onclick="takeMeasurement()">Tomar medición</button>
         </div>
     </section>
 
     <!-- About Section -->
     <section id="about-section" class="section">
         <div class="about-section">
-            <h2>About Color Analyzer</h2>
-            <p>Color Analyzer is a Progressive Web App designed to analyze and record colors from your camera feed. 
-               Perfect for designers, artists, and anyone who needs to capture and document colors accurately.</p>
+            <h2>Sobre esta aplicación</h2>
+            <p><i>Ground-eye-analysis</i> es una aplicación descargable y que trabaja sin interet, 
+                cuyo propósito principal es ofrecer la captura de colores de muestras de suelo de 
+                una manera sistemática y confiable, con la posibilidad de incluir muestras patrón 
+                para una medición aún más acertada, incluyendo en cualquier caso la detección del color 
+                en la escala de color de Munsell.</p>
+            <br>
+            <p>Cualquier sugerencia es bien aceptada, al correo <a href="mailto:">emilio21lemus@gmail.com</a></p>
+            <br>
+
+            <h2>Sobre el desarrollador</h2>
+            <p>Soy Emilio Lemus, estudiante de 5to semestre de la Lic. en Tecnología, y me gusta
+                ayudar a la gente con aplicaciones que simplifican sus vidas.
+            </p>
+            <br>
+
             <div class="button-container">
-                <button class="btn-secondary" onclick="showSection('data-section')">Back to Data</button>
+                <button class="btn-secondary" onclick="showSection('data-section')">Inicio</button>
             </div>
         </div>
     </section>

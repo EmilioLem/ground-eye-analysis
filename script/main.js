@@ -39,15 +39,15 @@ function updateTable() {
 }
 
 function deleteMeasurement(index) {
-    if (confirm('Are you sure you want to delete this measurement?')) {
+    if (confirm('¿Realmente quiere borrar esta toma?')) {
         measurements.splice(index, 1);
         saveMeasurements();
     }
 }
 
 function deleteAllData() {
-    if (confirm('Are you sure you want to delete all measurements?')) {
-        if (confirm('This action cannot be undone. Proceed?')) {
+    if (confirm('Quiere borrar toda la tabla?')) {
+        if (confirm('Esta acción no puede deshacerse. Desea borrar la tabla?')) {
             measurements = [];
             saveMeasurements();
         }
@@ -56,7 +56,7 @@ function deleteAllData() {
 
 function exportData() {
     const csv = [
-        ['ID', 'RGB', 'Notes', 'Timestamp'],
+        ['ID', 'RGB', 'Notas', 'Fecha / Hora'],
         ...measurements.map((m, i) => [
             i + 1,
             `${m.rgb.join('-')}`,
@@ -101,7 +101,7 @@ async function startCamera() {
         };
     } catch (err) {
         console.error('Error accessing camera:', err);
-        alert('Could not access camera. Please ensure camera permissions are granted.');
+        alert('No se pudo abrir la cámara. Por favor permita su uso en la configuración de la página.');
     }
 }
 
@@ -126,7 +126,7 @@ function takeMeasurement() {
     const pixelData = ctx.getImageData(centerX, centerY, 1, 1).data;
     
     const rgb = [pixelData[0], pixelData[1], pixelData[2]];
-    const notes = prompt('Add notes for this measurement:').replace(',', ' ') || '';
+    const notes = prompt('Notas de la toma:').replace(',', ' ') || '';
     
     var goodDate = new Date().toLocaleString();
     goodDate = goodDate.replace(',',' -');
@@ -137,7 +137,7 @@ function takeMeasurement() {
     });
     
     saveMeasurements();
-    alert(`Color measured: RGB(${rgb.join(',')})`);
+    alert(`Color registrado: RGB(${rgb.join(',')})`);
 }
 
 // Section Management

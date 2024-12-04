@@ -70,8 +70,7 @@ Hopefully, each point (either reference or reading) can use a couple hundred pix
 
 ## List 2.0
 
-* Translate everything
-* Bring back colorful background
+
 * Check styling on phone
 * Use complex color thing
 * Implement "live" markers.
