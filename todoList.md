@@ -71,7 +71,7 @@ Hopefully, each point (either reference or reading) can use a couple hundred pix
 ## List 2.0
 
 
-* Check styling on phone
 * Use complex color thing
 * Implement "live" markers.
-* 
+* Check styling on phone
+* Check all files are cached

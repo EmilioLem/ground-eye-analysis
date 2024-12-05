@@ -5,7 +5,7 @@ const urlsToCache = [
     './styles/main.css',
 
     './script/main.js',
-    './script/tableLogic.js',
+    //'./script/tableLogic.js',
 
     './manifest.json',
     './service-worker.js',

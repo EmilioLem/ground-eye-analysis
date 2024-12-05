@@ -28,8 +28,9 @@ function updateTable() {
             <td>${index + 1}</td>
             <td>
                 <span class="color-preview" style="background-color: rgb(${measurement.rgb.join(',')})"></span>
-                RGB(${measurement.rgb.join(',')})
             </td>
+            <td>(${measurement.rgb.join(',')})</td>
+            <td>(${measurement.munsell.join(',')})</td>
             <td>${measurement.notes}</td>
             <td>${measurement.timestamp}</td>
             <td><span class="delete-icon" onclick="deleteMeasurement(${index})">🗑️</span></td>
@@ -56,9 +57,10 @@ function deleteAllData() {
 
 function exportData() {
     const csv = [
-        ['ID', 'RGB', 'Notas', 'Fecha / Hora'],
+        ['ID', 'RGB', 'Munsell', 'Notas', 'Fecha / Hora'],
         ...measurements.map((m, i) => [
             i + 1,
+            `${m.rgb.join('-')}`,
             `${m.rgb.join('-')}`,
             m.notes,
             m.timestamp
@@ -78,7 +80,7 @@ function exportData() {
 let stream = null;
 const video = document.getElementById('camera-feed');
 const canvas = document.getElementById('camera-canvas');
-const ctx = canvas.getContext('2d');
+const ctx = canvas.getContext('2d', {willReadFrequently: true});
 
 async function startCamera() {
     try {
@@ -127,17 +129,27 @@ function takeMeasurement() {
     
     const rgb = [pixelData[0], pixelData[1], pixelData[2]];
     const notes = prompt('Notas de la toma:').replace(',', ' ') || '';
+    //const munsell = [pixelData[0], pixelData[1], pixelData[2]];
+    const munsell = [1,2,3];
     
     var goodDate = new Date().toLocaleString();
     goodDate = goodDate.replace(',',' -');
     measurements.push({
         rgb,
+        munsell,//rgb,//munsell,
         notes,
         timestamp: goodDate
     });
     
-    saveMeasurements();
-    alert(`Color registrado: RGB(${rgb.join(',')})`);
+    // Find 25 closest colors
+    const closestColors = findClosestColors(rgb);
+    
+    
+    // Show color selection modal
+    createColorSelectionModal(rgb, closestColors);
+    
+    /*saveMeasurements();
+    alert(`Color registrado: RGB(${rgb.join(',')})`);*/
 }
 
 // Section Management
@@ -155,7 +167,17 @@ function showSection(sectionId) {
 // Initialize
 updateTable();
 
+////////////////////////////////////////////////
 
+// Load the colors first
+loadMunsellColors('./munsellDatabaseCreation/colors.csv', () => {
+  /*/ Now you can use the functions directly
+  const closestToRed = findClosestColors([255, 0, 0]);
+  console.log('25 Closest Colors to Red:', closestToRed);
+
+  const specificColor = findMunsellColor('2.5R 4 6');
+  console.log('Specific Color:', specificColor);*/
+});
 
 
 
