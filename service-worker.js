@@ -5,11 +5,14 @@ const urlsToCache = [
     './styles/main.css',
 
     './script/main.js',
+    './script/colorLogic.js',
     //'./script/tableLogic.js',
 
     './manifest.json',
     './service-worker.js',
     './moreResources/chroma-min.js',
+
+    './munsellDatabaseCreation/colors.csv',
 
     './images/icon-192x192.png',
     './images/icon-512x512.png',
