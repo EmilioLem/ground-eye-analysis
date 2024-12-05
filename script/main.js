@@ -169,15 +169,15 @@ updateTable();
 
 ////////////////////////////////////////////////
 
-// Load the colors first//./munsellDatabaseCreation/colors.csv
+/*// Load the colors first//./munsellDatabaseCreation/colors.csv
 loadMunsellColors('https://emiliolem.github.io/ground-eye-analysis/munsellDatabaseCreation/colors.csv', () => {
-  /*/ Now you can use the functions directly
+  / Now you can use the functions directly
   const closestToRed = findClosestColors([255, 0, 0]);
   console.log('25 Closest Colors to Red:', closestToRed);
 
   const specificColor = findMunsellColor('2.5R 4 6');
-  console.log('Specific Color:', specificColor);*/
-});
+  console.log('Specific Color:', specificColor);
+});*/
 
 
 

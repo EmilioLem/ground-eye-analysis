@@ -1,5 +1,5 @@
 // Global Munsell Color Conversion Functions
-let colorData = [];
+//let colorData = [];
 
 // Parse CSV data into a structured array
 function parseCSV(csvString) {
@@ -33,7 +33,7 @@ function findClosestColors(targetRGB) {
     const sortedColors = colorData
         .map(color => ({
             color,
-            distance: calculateRGBDistance(targetRGB, color.slice(3))
+            distance: calculateRGBDistance(targetRGB, /*color.slice(3)*/[color.R, color.G, color.B])
         }))
         .sort((a, b) => a.distance - b.distance)
         .slice(0, 25)
@@ -42,7 +42,7 @@ function findClosestColors(targetRGB) {
     return sortedColors;
 }
 
-// Convert Munsell notation to color data
+/*/ Convert Munsell notation to color data
 function findMunsellColor(munsellNotation) {
     // Exact match first
     const exactMatch = colorData.find(color => 
@@ -55,9 +55,18 @@ function findMunsellColor(munsellNotation) {
 
     // If no exact match, return null
     return null;
+}*/
+
+function findMunsellColor(munsellNotation) {
+    const [hue, value1, value2] = munsellNotation.split(' ');
+    return colorData.find(color => 
+        color.H === hue &&
+        color.V === parseFloat(value1) &&
+        color.C === parseFloat(value2)
+    );
 }
 
-// Load CSV data from file
+/*/ Load CSV data from file
 function loadMunsellColors(filePath, callback) {
     const xhr = new XMLHttpRequest();
     xhr.open('GET', filePath, true);
@@ -72,7 +81,7 @@ function loadMunsellColors(filePath, callback) {
         }
     };
     xhr.send();
-}
+}*/
 
 ////////////////////////////////////////
 
@@ -153,12 +162,12 @@ function createColorSelectionModal(capturedRGB, closestColors) {
         colorSquare.style.cssText = `
             width: 100%;
             height: 100px;
-            background-color: rgb(${color.slice(3).join(',')});
+            background-color: rgb(${color.R}, ${color.G}, ${color.B}); 
             margin-bottom: 10px;
-        `;
+        `; //rgb(${color.slice(3).join(',')});
 
         const colorLabel = document.createElement('p');
-        colorLabel.textContent = `${color[0]} ${color[1]} ${color[2]}`;
+        colorLabel.textContent = `${color.H} ${color.V} ${color.C}`;//`${color[0]} ${color[1]} ${color[2]}`;
 
         colorItem.appendChild(colorSquare);
         colorItem.appendChild(colorLabel);
@@ -195,11 +204,12 @@ function createColorSelectionModal(capturedRGB, closestColors) {
         if (selectedColor) {
             // Store the selected Munsell color
             const currentMeasurement = measurements[measurements.length - 1];
-            currentMeasurement.munsell = [
+            currentMeasurement.munsell = [selectedColor.H, selectedColor.V, selectedColor.C];
+            /*currentMeasurement.munsell = [
                 selectedColor[0],  // Munsell Hue
                 selectedColor[1],  // First value
                 selectedColor[2]   // Second value
-            ];
+            ];*/
             
             // Update localStorage
             saveMeasurements();
