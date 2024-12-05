@@ -12,7 +12,7 @@ const urlsToCache = [
     './service-worker.js',
     './moreResources/chroma-min.js',
 
-    './munsellDatabaseCreation/colors.csv',
+    './munsellDatabaseCreation/colorData.js',
 
     './images/icon-192x192.png',
     './images/icon-512x512.png',
