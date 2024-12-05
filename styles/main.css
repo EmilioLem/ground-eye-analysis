@@ -1,5 +1,10 @@
+:root {
+    --text-scale: 2.5;
+}
+
 html {
-    font-size: clamp(14px, 2vw + 10px, 22px);
+    /* font-size: clamp(14px, 2vw + 10px, 22px); */
+    font-size: calc(14px * var(--text-scale));
 }
 
 * {
@@ -13,6 +18,7 @@ body {
     background: linear-gradient(to bottom right, #f0f0f0, #e0e0e0);
     background: linear-gradient(mintcream, moccasin);
     min-height: 100vh;
+    font-size: calc(16px * var(--text-scale));
 }
 
 .section {
@@ -142,4 +148,8 @@ button {
 .delete-icon {
     cursor: pointer;
     color: #dc3545;
+}
+
+button, input, table {
+    font-size: calc(14px * var(--text-scale));
 }
