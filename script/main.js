@@ -81,26 +81,56 @@ let stream = null;
 const video = document.getElementById('camera-feed');
 const canvas = document.getElementById('camera-canvas');
 const ctx = canvas.getContext('2d', {willReadFrequently: true});
+const loadingIndicator = document.createElement('div'); // Loading indicator element
+
+loadingIndicator.id = 'loading-indicator';
+loadingIndicator.textContent = 'Cargando cámara...'; // Or an animated GIF/SVG
+loadingIndicator.style.cssText = `
+    display: none; /* Hidden by default */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    z-index: 1001; /* Ensure it's above other elements */
+`;
+
+document.body.appendChild(loadingIndicator); // Add to the DOM
 
 async function startCamera() {
+  loadingIndicator.style.display = 'block'; // Show loading indicator
     try {
         stream = await navigator.mediaDevices.getUserMedia({
             //Loving this: https://upload.wikimedia.org/wikipedia/commons/0/0c/Vector_Video_Standards8.svg
             video: {
                 facingMode: 'environment',
-                width: { ideal: 1280 },//1080}, //min: 1080, ideal: 1080, max: 1080 
-                height: { ideal: 720 } //1080}, //min: 1080, ideal: 1080, max: 1080 
+                width: { ideal: 1080 },//1080}, //min: 1080, ideal: 1080, max: 1080 
+                height: { ideal: 1080 } //1080}, //min: 1080, ideal: 1080, max: 1080 
             }
         });
         video.srcObject = stream;
-        video.style.display = 'block';
-        canvas.style.display = 'none';
-        
-        // Set canvas size once video metadata is loaded
         video.onloadedmetadata = () => {
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-        };
+          canvas.width = video.videoWidth;
+          canvas.height = video.videoHeight;
+          video.style.display = 'block';
+          canvas.style.display = 'none';
+          loadingIndicator.style.display = 'none'; // Hide loading indicator
+      };
+
+      video.onloadeddata = () => {   //This is what actually shows the camera!!!
+          loadingIndicator.style.display = 'none'; // Hide loading indicator when video has started 
+      }
+        // video.style.display = 'block';
+        // canvas.style.display = 'none';
+        
+        // // Set canvas size once video metadata is loaded
+        // video.onloadedmetadata = () => {
+        //     canvas.width = video.videoWidth;
+        //     canvas.height = video.videoHeight;
+        // };
     } catch (err) {
         console.error('Error accessing camera:', err);
         alert('No se pudo abrir la cámara. Por favor permita su uso en la configuración de la página.');
@@ -111,6 +141,7 @@ function stopCamera() {
     if (stream) {
         stream.getTracks().forEach(track => track.stop());
         video.srcObject = null;
+        video.style.display = 'none'; // Hide video element
         stream = null;
     }
     showSection('data-section');
@@ -152,7 +183,21 @@ function takeMeasurement() {
     alert(`Color registrado: RGB(${rgb.join(',')})`);*/
 }
 
-// Section Management
+function showSection(sectionId) {
+  if (sectionId !== 'camera-section' && stream) { // Stop camera if not camera section
+      stopCamera();
+  }
+
+  document.querySelectorAll('.section').forEach(section => {
+      section.classList.remove('active');
+  });
+  document.getElementById(sectionId).classList.add('active');
+
+  if (sectionId === 'camera-section') {
+      startCamera();
+  }
+}
+/*/ Section Management
 function showSection(sectionId) {
     document.querySelectorAll('.section').forEach(section => {
         section.classList.remove('active');
@@ -162,7 +207,7 @@ function showSection(sectionId) {
     if (sectionId === 'camera-section') {
         startCamera();
     }
-}
+}*/
 
 // Initialize
 updateTable();
