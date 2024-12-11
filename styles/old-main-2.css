@@ -1,71 +1,6 @@
-/* main.css */
-
-:root {
-    --text-scale: 1; /* Adjust as needed */
-    --primary-color: #007bff;
-    --danger-color: #dc3545;
-    --secondary-color: #6c757d;
-}
-
-
-body {
-    font-family: sans-serif; /* More professional, widely supported */
-    background: linear-gradient(to bottom right, #f0f0f0, #e0e0e0);
-    background: linear-gradient(mintcream, rgba(255, 228, 181, 0.7));
-    min-height: 100vh;
-    margin: 0; /* Remove default body margin */
-    font-size: 16px; /* Default font size */
-    display: flex; /* For vertical alignment */
-    flex-direction: column;
-}
-
-.navbar {
-    background-color: #333;
-    color: white;
-    padding: 10px;
-}
-
-.navbar ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: space-around;  /* Evenly distribute nav items */
-}
-
-.navbar li {
-    margin: 0 10px;
-}
-
-.navbar a {
-    text-decoration: none;
-    color: white;
-    font-weight: bold;
-}
-
-main {
-    flex: 1; /* Allows main content to take up remaining space */
-    display: flex;
-    justify-content: center; /* Center content horizontally */
-    align-items: center;     /* Center content vertically */
-    padding: 20px;
-}
-
-.section {
-    display: none;
-    width: 90%;  /* Occupy most of the screen width */
-    max-width: 800px; /* Set a maximum width */
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-/* ... rest of your CSS ... 
-
 :root {
     --text-scale: 2.5;
-}*/
+}
 
 html {
     /* font-size: clamp(14px, 2vw + 10px, 22px); */
@@ -78,20 +13,20 @@ html {
     box-sizing: border-box;
 }
 
-/*body {
+body {
     font-family: Arial, sans-serif;
     background: linear-gradient(to bottom right, #f0f0f0, #e0e0e0);
     background: linear-gradient(mintcream, moccasin);
     min-height: 100vh;
     font-size: calc(16px * var(--text-scale));
-}*/
+}
 
-/*.section {
+.section {
     display: none;
     padding: 20px;
     max-width: 1200px;
     margin: 0 auto;
-}*/
+}
 
 .section.active {
     display: block;

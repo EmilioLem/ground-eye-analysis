@@ -10,7 +10,69 @@
     <link rel="manifest" href="./manifest.json">
 </head>
 <body>
-    <!-- Data Section -->
+
+    <nav class="navbar">
+        <ul>
+            <li><a href="#" onclick="showSection('data-section')">Datos</a></li>
+            <li><a href="#" onclick="showSection('camera-section')">Cámara</a></li>
+            <li><a href="#" onclick="showSection('about-section')">Acerca De</a></li>
+        </ul>
+    </nav>
+
+
+    <main>
+        <!-- Data Section -->
+        <section id="data-section" class="section active">
+            <div class="table-container">
+                <table id="measurements-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Color</th>
+                            <th>RGB</th>
+                            <th>Munsell</th>
+                            <th>Notas</th>
+                            <th>Fecha/Hora</th>
+                            <th>Borrar</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div class="button-container">
+                <button class="btn-primary" onclick="exportData()">Exportar CSV</button>
+                <button class="btn-danger" onclick="deleteAllData()">Borrar Todo</button>
+            </div>
+        </section>
+
+        <!-- Camera Section -->
+        <section id="camera-section" class="section">
+            <div class="camera-container">
+                <video id="camera-feed" autoplay playsinline></video>
+                <canvas id="camera-canvas"></canvas>
+                <div class="target-box"></div>
+            </div>
+            <div class="button-container">
+                <button class="btn-primary" onclick="takeMeasurement()">Tomar Medición</button>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about-section" class="section">
+            <div class="about-content">
+                <h2>Sobre esta aplicación</h2>
+                <p><i>Análisis de Suelo</i> ofrece la captura de colores de muestras de suelo de 
+                    forma sistemática y confiable. Permite incluir muestras patrón para mediciones 
+                    más precisas, detectando el color en la escala Munsell.</p>
+
+                <p>Sugerencias: <a href="mailto:emilio21lemus@gmail.com">emilio21lemus@gmail.com</a></p>
+
+                <h2>Sobre el desarrollador</h2>
+                <p>Emilio Lemus, estudiante de Tecnología, apasionado por crear aplicaciones que simplifiquen la vida.</p>
+            </div>
+        </section>
+    </main>
+    <!-- Data Section 
     <section id="data-section" class="section active">
         <div class="table-container">
             <table id="measurements-table">
@@ -34,9 +96,9 @@
             <button class="btn-primary" onclick="showSection('camera-section')">Abrir Cámara</button>
             <button class="btn-secondary" onclick="showSection('about-section')">Info</button>
         </div>
-    </section>
+    </section>-->
 
-    <!-- Camera Section -->
+    <!-- Camera Section
     <section id="camera-section" class="section">
         <div class="camera-container">
             <video id="camera-feed" autoplay playsinline></video>
@@ -47,9 +109,9 @@
             <button class="btn-secondary" onclick="stopCamera()">Cerrar cámara</button>
             <button class="btn-primary" onclick="takeMeasurement()">Tomar medición</button>
         </div>
-    </section>
+    </section> -->
 
-    <!-- About Section -->
+    <!-- About Section
     <section id="about-section" class="section">
         <div class="about-section">
             <h2>Sobre esta aplicación</h2>
@@ -72,7 +134,7 @@
                 <button class="btn-secondary" onclick="showSection('data-section')">Inicio</button>
             </div>
         </div>
-    </section>
+    </section> -->
 
      
     
