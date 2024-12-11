@@ -1,7 +1,7 @@
 /* main.css */
 
 :root {
-    --text-scale: 2.5; /* Adjust as needed */
+    --text-scale: 3; /* Adjust as needed */
     --primary-color: #007bff;
     --danger-color: #dc3545;
     --secondary-color: #6c757d;
@@ -15,6 +15,7 @@ body {
     min-height: 100vh;
     margin: 0; /* Remove default body margin */
     font-size: 16px; /* Default font size */
+    font-size: calc(16px * var(--text-scale));
     display: flex; /* For vertical alignment */
     flex-direction: column;
 }
