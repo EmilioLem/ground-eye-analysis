@@ -126,13 +126,16 @@ th {
 }
 
 .color-preview {
-    width: 24px;
-    height: 24px;
+    /*width: 24px;
+    height: 24px;*/
+    width: calc(24px * var(--text-scale)); /* Dynamically scale width */
+    height: calc(24px * var(--text-scale)); /* Dynamically scale height */
     border: 1px solid #ddd;
     border-radius: 4px;
     display: inline-block;
     vertical-align: middle;
-    margin-right: 8px;
+    /* margin-right: 8px; */
+    margin-right: calc(8px * var(--text-scale));
 }
 
 .button-container {
