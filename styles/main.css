@@ -45,7 +45,7 @@ body {
   background-repeat: no-repeat; /* Ensures the logo doesn't repeat */
   background-position: center; /* Centers the logo */
   background-size: cover; /* Scales the logo to fit without distortion */
-  opacity: 0.85;
+  /* opacity: 1; */
   
   padding: 0px;
     margin: 0px;
@@ -98,7 +98,7 @@ main {
     max-width: 800px; /* Set a maximum width */
     background: white;
     padding: 20px;
-    border-radius: 8px;
+    border-radius: 16px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
@@ -238,7 +238,7 @@ button {
 #camera-feed {
     width: 100%;
     display: none;
-    opacity: calc(1/0.85);
+    /* opacity: calc(1/0.85); */
 }
 
 #camera-canvas {
@@ -267,6 +267,11 @@ button {
     display: flex;
     justify-content: center;
     position: relative;
+    opacity: 0.8;
+}
+#about-section{
+    opacity: 0.85;
+    padding: 5%;
 }
 
 .about-section h2 {
