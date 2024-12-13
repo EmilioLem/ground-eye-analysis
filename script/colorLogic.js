@@ -36,7 +36,7 @@ function findClosestColors(targetRGB) {
             distance: calculateRGBDistance(targetRGB, /*color.slice(3)*/[color.R, color.G, color.B])
         }))
         .sort((a, b) => a.distance - b.distance)
-        .slice(0, 25)
+        .slice(0, 50)
         .map(item => item.color);
 
     return sortedColors;
@@ -139,6 +139,44 @@ function createColorSelectionModal(capturedRGB, closestColors) {
     capturedColorDiv.appendChild(colorText);
     modalContent.appendChild(capturedColorDiv);
 
+    // Confirm button
+    const confirmButton = document.createElement('button');
+    confirmButton.textContent = 'Confirmar Selección';
+    confirmButton.style.cssText = `
+        margin: 20px;
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    `;
+    confirmButton.addEventListener('click', () => {
+        if (selectedColor) {
+            // Store the selected Munsell color
+            const currentMeasurement = measurements[measurements.length - 1];
+            currentMeasurement.munsell = [selectedColor.H, selectedColor.V, selectedColor.C];
+            /*currentMeasurement.munsell = [
+                selectedColor[0],  // Munsell Hue
+                selectedColor[1],  // First value
+                selectedColor[2]   // Second value
+            ];*/
+            
+        }else{
+            const firstColor = closestColors[0];
+            const currentMeasurement = measurements[measurements.length - 1];
+            currentMeasurement.munsell = [firstColor.H, firstColor.V, firstColor.C];
+        }
+        // Update localStorage
+        saveMeasurements();
+        
+        // Remove the modal
+        document.body.removeChild(modal);
+
+        document.getElementById("smallSuggestionP").style.display = "unset";
+    });
+    modalContent.appendChild(confirmButton);
+
     // Closest colors grid
     const colorGrid = document.createElement('div');
     colorGrid.style.cssText = `
@@ -149,7 +187,7 @@ function createColorSelectionModal(capturedRGB, closestColors) {
 
     let selectedColor = null;
 
-    closestColors.forEach(color => {
+    closestColors.forEach((color, index) => {
         const colorItem = document.createElement('div');
         colorItem.style.cssText = `
             border: 2px solid #ddd;
@@ -183,42 +221,18 @@ function createColorSelectionModal(capturedRGB, closestColors) {
             selectedColor = color;
         });
 
+        // Pre-select the first color
+        if (index === 0) {
+            colorItem.style.border = '2px solid blue';
+            selectedColor = color;
+        }
         colorGrid.appendChild(colorItem);
+
     });
 
     modalContent.appendChild(colorGrid);
 
-    // Confirm button
-    const confirmButton = document.createElement('button');
-    confirmButton.textContent = 'Confirmar Selección';
-    confirmButton.style.cssText = `
-        margin-top: 20px;
-        padding: 10px 20px;
-        background-color: #007bff;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-    `;
-    confirmButton.addEventListener('click', () => {
-        if (selectedColor) {
-            // Store the selected Munsell color
-            const currentMeasurement = measurements[measurements.length - 1];
-            currentMeasurement.munsell = [selectedColor.H, selectedColor.V, selectedColor.C];
-            /*currentMeasurement.munsell = [
-                selectedColor[0],  // Munsell Hue
-                selectedColor[1],  // First value
-                selectedColor[2]   // Second value
-            ];*/
-            
-            // Update localStorage
-            saveMeasurements();
-            
-            // Remove the modal
-            document.body.removeChild(modal);
-        }
-    });
-    modalContent.appendChild(confirmButton);
+    
 
     modal.appendChild(modalContent);
     document.body.appendChild(modal);

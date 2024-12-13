@@ -28,6 +28,9 @@
     display: block; /* Ensure it's treated like a block-level element */
     margin: 0 auto; /* Center it horizontally */
     height: auto; /* Maintain aspect ratio */
+    object-fit: contain;
+    width: 40%;
+    height: auto;
     max-width: 80%; /* Constrain width relative to parent section */
     max-height: 90%; /* Optional: prevent it from being too tall */
 }
@@ -144,12 +147,18 @@ th, td {
     padding: 12px;
     text-align: left;
     border-bottom: 1px solid #ddd;
+    position: relative;
+    z-index: 2;
 }
 
 th {
     background-color: #f8f8f8;
     position: sticky;
     top: 0;
+    z-index: 3;
+}
+thead{
+    background-color: #ddd;
 }
 
 .color-preview {
@@ -171,6 +180,8 @@ th {
     display: flex;
     gap: 10px;
     margin-top: 20px;
+    position: relative;
+    z-index: 2;
 }
 
 button {

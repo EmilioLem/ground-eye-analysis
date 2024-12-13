@@ -80,10 +80,12 @@ Hopefully, each point (either reference or reading) can use a couple hundred pix
 
 - [x]  Check all files are cached
 
-- School logo behind data thing
+- [x] School logo behind data thing
 
-- 50 color samples when taking a new sample
+- [x] 50 color samples when taking a new sample
 
-- Move "Confirmar selección" upper
+- [x] Move "Confirmar selección" upper
 
 - Preselect the first color
+
+* Just check mobile about image size
