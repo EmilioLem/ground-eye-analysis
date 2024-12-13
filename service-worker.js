@@ -17,6 +17,8 @@ const urlsToCache = [
     './images/icon-192x192.png',
     './images/icon-512x512.png',
     './images/favicon.ico',
+    './images/enes-juriquilla-unam-logos-header.png',
+    './images/enes-juriquilla-unam-logos-header-positivo.png',
 
 ];
 

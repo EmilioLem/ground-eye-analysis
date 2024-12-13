@@ -8,6 +8,30 @@
     --secondary-color: #6c757d;
 }
 
+.background-logo-data {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    max-width: 90%; 
+    max-height: 90%;
+    object-fit: contain;
+    width: 80%;
+    height: auto;
+
+    opacity: 0.2; /* Make it faded */
+    z-index: 0; /* Place behind other content */
+    pointer-events: none; /* Ensure it doesn't interfere with interactions */
+}
+.background-logo-about {
+    display: block; /* Ensure it's treated like a block-level element */
+    margin: 0 auto; /* Center it horizontally */
+    height: auto; /* Maintain aspect ratio */
+    max-width: 80%; /* Constrain width relative to parent section */
+    max-height: 90%; /* Optional: prevent it from being too tall */
+}
+
 
 body {
     font-family: sans-serif; /* More professional, widely supported */
@@ -17,7 +41,7 @@ body {
     margin: 0; /* Remove default body margin */
     font-size: 16px; /* Default font size */
     font-size: calc(16px * var(--text-scale));
-    font-size: calc(1 * var(--text-scale));
+    font-size: calc(1.1 * var(--text-scale));
     display: flex; /* For vertical alignment */
     flex-direction: column;
 }
@@ -176,6 +200,10 @@ button {
 /* Camera Section Styles */
 .camera-section {
     text-align: center;
+    position: relative;
+}
+#data-section {
+    position: relative; 
 }
 
 .camera-container {
@@ -212,6 +240,10 @@ button {
     padding: 30px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+
+    display: flex;
+    justify-content: center;
+    position: relative;
 }
 
 .about-section h2 {
