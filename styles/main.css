@@ -40,6 +40,16 @@ body {
     font-family: sans-serif; /* More professional, widely supported */
     background: linear-gradient(to bottom right, #f0f0f0, #e0e0e0);
     background: linear-gradient(mintcream, rgba(255, 228, 181, 0.7));
+    
+    background-image: url('../images/image.png'); /* Replace with the actual path to your logo */
+  background-repeat: no-repeat; /* Ensures the logo doesn't repeat */
+  background-position: center; /* Centers the logo */
+  background-size: cover; /* Scales the logo to fit without distortion */
+  opacity: 0.85;
+  
+  padding: 0px;
+    margin: 0px;
+
     min-height: 100vh;
     margin: 0; /* Remove default body margin */
     font-size: 16px; /* Default font size */
@@ -47,6 +57,7 @@ body {
     font-size: calc(1.1 * var(--text-scale));
     display: flex; /* For vertical alignment */
     flex-direction: column;
+    
 }
 
 .navbar {
@@ -227,6 +238,7 @@ button {
 #camera-feed {
     width: 100%;
     display: none;
+    opacity: calc(1/0.85);
 }
 
 #camera-canvas {
