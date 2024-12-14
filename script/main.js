@@ -153,12 +153,45 @@ function takeMeasurement() {
     // Draw current video frame to canvas
     ctx.drawImage(video, 0, 0);
 
-    // Get center pixel color
+    // Get the 10x10 center area
+    const centerX = Math.floor(canvas.width / 2);
+    const centerY = Math.floor(canvas.height / 2);
+
+    // Initialize arrays to store RGB values
+    let redTotal = 0;
+    let greenTotal = 0;
+    let blueTotal = 0;
+
+    // Sample 10x10 center pixels
+    const sampleSize = 10;
+    const startX = centerX - Math.floor(sampleSize / 2);
+    const startY = centerY - Math.floor(sampleSize / 2);
+
+    for (let x = 0; x < sampleSize; x++) {
+        for (let y = 0; y < sampleSize; y++) {
+            const pixelData = ctx.getImageData(startX + x, startY + y, 1, 1).data;
+
+            // Accumulate RGB values
+            redTotal += pixelData[0];
+            greenTotal += pixelData[1];
+            blueTotal += pixelData[2];
+        }
+    }
+
+    // Calculate average RGB
+    const totalPixels = sampleSize * sampleSize;
+    const rgb = [
+        Math.floor(redTotal / totalPixels),
+        Math.floor(greenTotal / totalPixels),
+        Math.floor(blueTotal / totalPixels)
+    ];
+
+    /*/ Get center pixel color
     const centerX = Math.floor(canvas.width / 2);
     const centerY = Math.floor(canvas.height / 2);
     const pixelData = ctx.getImageData(centerX, centerY, 1, 1).data;
     
-    const rgb = [pixelData[0], pixelData[1], pixelData[2]];
+    const rgb = [pixelData[0], pixelData[1], pixelData[2]];*/
     const notes = prompt('Notas de la toma:').replace(',', ' ') || '';
     //const munsell = [pixelData[0], pixelData[1], pixelData[2]];
     const munsell = [1,2,3];
