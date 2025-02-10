@@ -111,6 +111,16 @@ async function startCamera() {
                 height: { ideal: 1080 } //1080}, //min: 1080, ideal: 1080, max: 1080 
             }
         });
+
+        const track = stream.getVideoTracks()[0];
+        const capabilities = track.getCapabilities();
+
+        if (capabilities.torch) {
+            await track.applyConstraints({ advanced: [{ torch: true }] });
+        } else {
+            console.warn("Torch is not supported on this device.");
+        }
+
         video.srcObject = stream;
         video.onloadedmetadata = () => {
           canvas.width = video.videoWidth;
