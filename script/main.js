@@ -61,7 +61,7 @@ function exportData() {
         ...measurements.map((m, i) => [
             i + 1,
             `${m.rgb.join('-')}`,
-            `${m.rgb.join('-')}`,
+            `${m.munsell.join('-')}`,
             m.notes,
             m.timestamp
         ])
