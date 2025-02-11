@@ -149,10 +149,19 @@ async function startCamera() {
 
 function stopCamera() {
     if (stream) {
-        stream.getTracks().forEach(track => track.stop());
-        video.srcObject = null;
-        video.style.display = 'none'; // Hide video element
-        stream = null;
+      
+      const track = stream.getVideoTracks()[0];
+      const capabilities = track.getCapabilities();
+      if (capabilities.torch) {
+          track.applyConstraints({ advanced: [{ torch: false }] });
+      } else {
+          console.log("We weren't using the torch, we couldn't be doing that.");
+      }
+      
+      stream.getTracks().forEach(track => track.stop());
+      video.srcObject = null;
+      video.style.display = 'none'; // Hide video element
+      stream = null;
     }
     showSection('data-section');
 }
