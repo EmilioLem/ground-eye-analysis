@@ -100,6 +100,45 @@ loadingIndicator.style.cssText = `
 
 document.body.appendChild(loadingIndicator); // Add to the DOM
 
+function flashControl(lightUp){
+  if(lightUp && stream){
+    const track = stream.getVideoTracks()[0];
+    const capabilities = track.getCapabilities();
+
+    if (capabilities.torch) {
+      flashOn = !flashOn; // Toggle flash state
+      track.applyConstraints({ advanced: [{ torch: true }] });
+      const flashButton = document.getElementById('flash-button');
+      if (flashButton) {
+        flashButton.textContent = flashOn ? 'Flash: On' : 'Flash: Off'; // Update button text
+      }
+    }
+  }else if(stream){
+    //
+  }else{
+    console.warn("Tried to toggle the flash, but there's no stream yet");
+  }
+}
+
+
+function flashControl(){
+  if (stream) {
+    const track = stream.getVideoTracks()[0];
+    const capabilities = track.getCapabilities();
+
+    if (capabilities.torch) {
+      flashOn = !flashOn; // Toggle flash state
+      track.applyConstraints({ advanced: [{ torch: flashOn }] });
+      const flashButton = document.getElementById('flash-button');
+      if (flashButton) {
+        flashButton.textContent = flashOn ? 'Flash: On' : 'Flash: Off'; // Update button text
+      }
+    } else {
+      console.warn("Torch is not supported on this device.");
+    }
+  }
+}
+
 async function startCamera() {
   loadingIndicator.style.display = 'block'; // Show loading indicator
     try {
