@@ -160,7 +160,7 @@ async function startCamera() {
             }
         });
 
-        lightUp(true);
+        flashControl(true);
         /*const track = stream.getVideoTracks()[0];
         const capabilities = track.getCapabilities();
 
@@ -199,7 +199,7 @@ async function startCamera() {
 function stopCamera() {
     if (stream) {
       
-      lightUp(false);
+      flashControl(false);
       /*const track = stream.getVideoTracks()[0];
       const capabilities = track.getCapabilities();
       if (capabilities.torch) {
