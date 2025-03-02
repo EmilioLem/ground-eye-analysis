@@ -130,23 +130,6 @@ function flashControl(lightUp){
 }
 
 
-/*function flashControl(){
-  if (stream) {
-    const track = stream.getVideoTracks()[0];
-    const capabilities = track.getCapabilities();
-
-    if (capabilities.torch) {
-      flashOn = !flashOn; // Toggle flash state
-      track.applyConstraints({ advanced: [{ torch: flashOn }] });
-      const flashButton = document.getElementById('flash-button');
-      if (flashButton) {
-        flashButton.textContent = flashOn ? 'Flash: On' : 'Flash: Off'; // Update button text
-      }
-    } else {
-      console.warn("Torch is not supported on this device.");
-    }
-  }
-}*/
 
 async function startCamera() {
   loadingIndicator.style.display = 'block'; // Show loading indicator
