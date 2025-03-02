@@ -99,19 +99,19 @@ loadingIndicator.style.cssText = `
 `;
 
 document.body.appendChild(loadingIndicator); // Add to the DOM
-
-function flashControl(lightUp){
+/*isUsingTheFlash = false;
+function flashControl(){
   if(stream){
     const flashButton = document.getElementById('flash-button');
 
     const track = stream.getVideoTracks()[0];
     const capabilities = track.getCapabilities();
 
-    if(lightUp){
+    if(!isUsingTheFlash){
 
       if (capabilities.torch) {        
         track.applyConstraints({ advanced: [{ torch: true }] });
-        flashButton.textContent = lightUp ? 'Flash: On' : 'Flash: Off'; // Update button text
+        flashButton.textContent = isUsingTheFlash ? 'Flash: On' : 'Flash: Off'; // Update button text
       }else{
         console.warn("Tried to use the torch... theres no torch");
       }
@@ -119,13 +119,33 @@ function flashControl(lightUp){
     else{
       if (capabilities.torch) {        
         track.applyConstraints({ advanced: [{ torch: false }] });
-        flashButton.textContent = lightUp ? 'Flash: On' : 'Flash: Off'; // Update button text
+        flashButton.textContent = isUsingTheFlash ? 'Flash: On' : 'Flash: Off'; // Update button text
       }else{
         console.warn("Tried to use the torch... theres no torch");
       }
     }
   }else{
     console.warn("Tried to toggle the flash, but there's no stream yet");
+  }
+}*/
+
+let flashState = false; // Keep track of flash state
+
+function flashControl(){
+  if (stream) {
+    const track = stream.getVideoTracks()[0];
+    const capabilities = track.getCapabilities();
+
+    if (capabilities.torch) {
+      flashState = !flashState; // Toggle flash state
+      track.applyConstraints({ advanced: [{ torch: flashState }] });
+      const flashButton = document.getElementById('flash-button');
+      if (flashButton) {
+        flashButton.textContent = flashState ? 'Flash: Prendido' : 'Flash: Apagado'; // Update button text
+      }
+    } else {
+      console.warn("Torch is not supported on this device.");
+    }
   }
 }
 
@@ -143,7 +163,7 @@ async function startCamera() {
             }
         });
 
-        flashControl(true);
+        //flashControl(true); //Not by default anymore
         /*const track = stream.getVideoTracks()[0];
         const capabilities = track.getCapabilities();
 
@@ -182,7 +202,10 @@ async function startCamera() {
 function stopCamera() {
     if (stream) {
       
-      flashControl(false);
+      if(flashState){
+        flashControl(false);
+      }
+      
       /*const track = stream.getVideoTracks()[0];
       const capabilities = track.getCapabilities();
       if (capabilities.torch) {
