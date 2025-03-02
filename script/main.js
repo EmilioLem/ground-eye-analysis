@@ -99,35 +99,6 @@ loadingIndicator.style.cssText = `
 `;
 
 document.body.appendChild(loadingIndicator); // Add to the DOM
-/*isUsingTheFlash = false;
-function flashControl(){
-  if(stream){
-    const flashButton = document.getElementById('flash-button');
-
-    const track = stream.getVideoTracks()[0];
-    const capabilities = track.getCapabilities();
-
-    if(!isUsingTheFlash){
-
-      if (capabilities.torch) {        
-        track.applyConstraints({ advanced: [{ torch: true }] });
-        flashButton.textContent = isUsingTheFlash ? 'Flash: On' : 'Flash: Off'; // Update button text
-      }else{
-        console.warn("Tried to use the torch... theres no torch");
-      }
-    }
-    else{
-      if (capabilities.torch) {        
-        track.applyConstraints({ advanced: [{ torch: false }] });
-        flashButton.textContent = isUsingTheFlash ? 'Flash: On' : 'Flash: Off'; // Update button text
-      }else{
-        console.warn("Tried to use the torch... theres no torch");
-      }
-    }
-  }else{
-    console.warn("Tried to toggle the flash, but there's no stream yet");
-  }
-}*/
 
 let flashState = false; // Keep track of flash state
 
@@ -163,16 +134,6 @@ async function startCamera() {
             }
         });
 
-        //flashControl(true); //Not by default anymore
-        /*const track = stream.getVideoTracks()[0];
-        const capabilities = track.getCapabilities();
-
-        if (capabilities.torch) {
-            await track.applyConstraints({ advanced: [{ torch: true }] });
-        } else {
-            console.warn("Torch is not supported on this device.");
-        }*/
-
         video.srcObject = stream;
         video.onloadedmetadata = () => {
           canvas.width = video.videoWidth;
@@ -205,14 +166,6 @@ function stopCamera() {
       if(flashState){
         flashControl(false);
       }
-      
-      /*const track = stream.getVideoTracks()[0];
-      const capabilities = track.getCapabilities();
-      if (capabilities.torch) {
-          track.applyConstraints({ advanced: [{ torch: false }] });
-      } else {
-          console.log("We weren't using the torch, we couldn't be doing that.");
-      }*/
       
       stream.getTracks().forEach(track => track.stop());
       video.srcObject = null;
