@@ -101,27 +101,36 @@ loadingIndicator.style.cssText = `
 document.body.appendChild(loadingIndicator); // Add to the DOM
 
 function flashControl(lightUp){
-  if(lightUp && stream){
+  if(stream){
+    const flashButton = document.getElementById('flash-button');
+
     const track = stream.getVideoTracks()[0];
     const capabilities = track.getCapabilities();
 
-    if (capabilities.torch) {
-      flashOn = !flashOn; // Toggle flash state
-      track.applyConstraints({ advanced: [{ torch: true }] });
-      const flashButton = document.getElementById('flash-button');
-      if (flashButton) {
-        flashButton.textContent = flashOn ? 'Flash: On' : 'Flash: Off'; // Update button text
+    if(lightUp){
+
+      if (capabilities.torch) {        
+        track.applyConstraints({ advanced: [{ torch: true }] });
+        flashButton.textContent = lightUp ? 'Flash: On' : 'Flash: Off'; // Update button text
+      }else{
+        console.warn("Tried to use the torch... theres no torch");
       }
     }
-  }else if(stream){
-    //
+    else{
+      if (capabilities.torch) {        
+        track.applyConstraints({ advanced: [{ torch: false }] });
+        flashButton.textContent = lightUp ? 'Flash: On' : 'Flash: Off'; // Update button text
+      }else{
+        console.warn("Tried to use the torch... theres no torch");
+      }
+    }
   }else{
     console.warn("Tried to toggle the flash, but there's no stream yet");
   }
 }
 
 
-function flashControl(){
+/*function flashControl(){
   if (stream) {
     const track = stream.getVideoTracks()[0];
     const capabilities = track.getCapabilities();
@@ -137,7 +146,7 @@ function flashControl(){
       console.warn("Torch is not supported on this device.");
     }
   }
-}
+}*/
 
 async function startCamera() {
   loadingIndicator.style.display = 'block'; // Show loading indicator
@@ -151,14 +160,15 @@ async function startCamera() {
             }
         });
 
-        const track = stream.getVideoTracks()[0];
+        lightUp(true);
+        /*const track = stream.getVideoTracks()[0];
         const capabilities = track.getCapabilities();
 
         if (capabilities.torch) {
             await track.applyConstraints({ advanced: [{ torch: true }] });
         } else {
             console.warn("Torch is not supported on this device.");
-        }
+        }*/
 
         video.srcObject = stream;
         video.onloadedmetadata = () => {
@@ -189,13 +199,14 @@ async function startCamera() {
 function stopCamera() {
     if (stream) {
       
-      const track = stream.getVideoTracks()[0];
+      lightUp(false);
+      /*const track = stream.getVideoTracks()[0];
       const capabilities = track.getCapabilities();
       if (capabilities.torch) {
           track.applyConstraints({ advanced: [{ torch: false }] });
       } else {
           console.log("We weren't using the torch, we couldn't be doing that.");
-      }
+      }*/
       
       stream.getTracks().forEach(track => track.stop());
       video.srcObject = null;
